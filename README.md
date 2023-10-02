@@ -22,6 +22,7 @@ The BAMX Donations App is a mobile application built with React Native for Andro
 1. Clone this repository to your local machine.
    ```shell
    git clone https://github.com/your-username/bamx-donations-app.git
+   install [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/): Puedes descargarlos e instalarlos desde [el sitio oficial de Node.js](https://nodejs.org/).
 Run npm install in the root directory to install dependencies.
 Create a Firebase project and set up credentials in the app.
 Run npm start to launch the app on an emulator or physical device.
