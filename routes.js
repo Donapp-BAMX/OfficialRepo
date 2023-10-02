@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { AuthProvider } from './context/AuthContext';
 import Home from './HomeScreen';
 import Login from './LoginScreen';
 import Register from './RegisterScreen';
+import { AuthProvider } from './authContext';
 
 function Routes() {
   return (

@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 import {
     getAuth,
@@ -44,4 +44,21 @@ export const registerUser = (email, password) => {
 export const logoutUser = () => {
     const auth = getAuth();
     return signOut(auth);
+};
+
+// Función para obtener la información del usuario
+export const getUserInformation = async (currentUser) => {
+  if (!currentUser) {
+    throw new Error("El usuario actual es nulo");
+  }
+
+  const docRef = doc(db, "users", currentUser);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const userData = docSnap.data();
+    return userData;
+  } else {
+    throw new Error("El documento no existe");
+  }
 };

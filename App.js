@@ -6,37 +6,40 @@ import { createStackNavigator } from '@react-navigation/stack';
 import RegisterScreen from './RegisterScreen';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
+import { AuthProvider } from './authContext'; // Importa AuthProvider
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{
-            title: 'Register',
-          }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{
-            title: 'Login',
-          }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            title: 'Home',
-          }}
-        />
-      </Stack.Navigator>
-      <StatusBar style="auto" />
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{
+              title: 'Register',
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              title: 'Login',
+            }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              title: 'Home',
+            }}
+          />
+        </Stack.Navigator>
+        <StatusBar style="auto" />
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
 
