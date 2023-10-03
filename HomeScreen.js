@@ -6,7 +6,33 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = () => {
+  const handleLogout = () => {
+    logoutUser()
+      .then(() => {
+        navigation.navigate('Login');
+      })
+      .catch((error) => {
+        console.error('Error during logout:', error);
+      });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Pagina principal</Text>
+    </View>
+  );
+};
+
+const DonacionScreen = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Pantalla de Donación</Text>
+    </View>
+  );
+};
+
+const PerfilScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
 
   const [email, setEmail] = useState(null);
@@ -48,22 +74,6 @@ const HomeScreen = ({ navigation }) => {
       <Text>Name: {name}</Text>
       <Text>Last name: {lastName}</Text>
       <Button title="Logout" onPress={handleLogout} />
-    </View>
-  );
-};
-
-const DonacionScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Pantalla de Donación</Text>
-    </View>
-  );
-};
-
-const PerfilScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Pantalla de Perfil</Text>
     </View>
   );
 };
