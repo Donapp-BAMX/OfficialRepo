@@ -3,8 +3,10 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { logoutUser, getUserInformation } from './firebase';
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBrowserHistory } from 'history';
 
 const Tab = createBottomTabNavigator();
+const history = createBrowserHistory();
 
 const HomeScreen = () => {
   const handleLogout = () => {
@@ -24,11 +26,20 @@ const HomeScreen = () => {
   );
 };
 
-const DonacionScreen = () => {
+  const DonacionScreen = () => {
+    function redirectToLinkPay() {
+      window.location.href = 'https://donate.stripe.com/test_fZedUQ8QE4LG49ybII';
+  }
+
+  function redirectToForm() {
+    history.push('/DonateMedicine');
+  }
+    
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Pantalla de Donación</Text>
-    </View>
+    <div>
+      <button onClick={redirectToLinkPay}>Redirigir a un enlace</button>
+      <button onClick={redirectToForm}>Redirigir a otra vista</button>
+    </div>
   );
 };
 
