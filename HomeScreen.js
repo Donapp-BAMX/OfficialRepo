@@ -50,6 +50,7 @@ const PerfilScreen = ({ navigation }) => {
   const [registered, setRegistered] = useState(null);
   const [name, setName] = useState(null);
   const [lastName, setLastName] = useState(null);
+  const [biography, setBio] = useState(null)
 
   useEffect(() => {
     if (currentUser) {
@@ -59,6 +60,7 @@ const PerfilScreen = ({ navigation }) => {
           setRegistered(userData.registeredAt.toDate().toISOString().substring(0, 10));
           setName(userData.name);
           setLastName(userData.lastName);
+          setBio(userData.biography);
         })
         .catch((error) => {
           console.error('Error fetching user information:', error);
@@ -84,6 +86,7 @@ const PerfilScreen = ({ navigation }) => {
       <Text>Date of register: {registered}</Text>
       <Text>Name: {name}</Text>
       <Text>Last name: {lastName}</Text>
+      <Text>Bio: {biography}</Text>
       <Button title="Logout" onPress={handleLogout} />
     </View>
   );
