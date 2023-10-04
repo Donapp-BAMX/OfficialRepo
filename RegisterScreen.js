@@ -5,7 +5,6 @@ import { registerUser } from './firebase';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
 
-
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

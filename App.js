@@ -6,7 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import RegisterScreen from './RegisterScreen';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
-import { AuthProvider } from './authContext'; // Importa AuthProvider
+import ForgotPassword from './forgotPassword';
+import { AuthProvider } from './authContext';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,13 @@ export default function App() {
             component={HomeScreen}
             options={{
               title: 'Home',
+            }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPassword}
+            options={{
+              title: 'Forgot Password',
             }}
           />
         </Stack.Navigator>

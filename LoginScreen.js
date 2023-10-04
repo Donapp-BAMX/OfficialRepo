@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { loginUser } from './firebase';
 
@@ -38,6 +38,10 @@ const LoginScreen = () => {
     navigation.navigate('Register');
   };
 
+  const handleForgotPasswordPress = () => {
+    navigation.navigate('ForgotPassword');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Login</Text>
@@ -62,6 +66,9 @@ const LoginScreen = () => {
           aquí
         </Text>
       </Text>
+      <TouchableOpacity onPress={handleForgotPasswordPress}>
+        <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -87,6 +94,11 @@ const styles = StyleSheet.create({
   registerText: {
     fontSize: 12,
     marginTop: 20,
+  },
+  forgotPasswordText: {
+    color: '#293462',
+    fontWeight: 'bold',
+    marginTop: 10,
   },
 });
 
