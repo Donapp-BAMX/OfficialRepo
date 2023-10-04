@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 
+import { sendPasswordResetEmail } from 'firebase/auth';
+
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -61,4 +63,9 @@ export const getUserInformation = async (currentUser) => {
   } else {
     throw new Error("El documento no existe");
   }
+};
+
+export const resetPassword = (email) => {
+  const auth = getAuth(); // Obtén una instancia de Auth
+  return sendPasswordResetEmail(auth, email); // Utiliza sendPasswordResetEmail para enviar el correo de restablecimiento
 };
