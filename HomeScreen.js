@@ -81,6 +81,14 @@ const VoluntarioScreen = () => {
   );
 };
 
+const DonacionScreen = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Pantalla de Donacion</Text>
+    </View>
+  );
+};
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator>
