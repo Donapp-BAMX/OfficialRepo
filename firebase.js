@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, addDoc, collection, Timestamp, getDocs } from "firebase/firestore";
 
 import { sendPasswordResetEmail } from 'firebase/auth';
 
@@ -68,4 +68,35 @@ export const getUserInformation = async (currentUser) => {
 export const resetPassword = (email) => {
   const auth = getAuth(); // Obtén una instancia de Auth
   return sendPasswordResetEmail(auth, email); // Utiliza sendPasswordResetEmail para enviar el correo de restablecimiento
+};
+
+// Funcion para guardar anuncios en firestore
+export const saveAnuncio = async (title, description) => {
+  const anunciosCollection = collection(db, "anuncios");
+  const currentDate = Timestamp.now();
+
+  try {
+    await addDoc(anunciosCollection, {
+      title,
+      description,
+      creationDate: currentDate,
+    });
+    console.log("Anuncio guardado exitosamente.");
+  } catch (error) {
+    console.error("Error al guardar el anuncio:", error);
+    throw error;
+  }
+};
+
+// Función para obtener todos los anuncios desde Firestore
+export const getAnuncios = async () => {
+  const anunciosCollection = collection(db, "anuncios");
+  const querySnapshot = await getDocs(anunciosCollection);
+  const anuncios = [];
+
+  querySnapshot.forEach((doc) => {
+    anuncios.push({ id: doc.id, ...doc.data() });
+  });
+
+  return anuncios;
 };
