@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator  } from 'react-native';
 import { logoutUser, getUserInformation } from './firebase';
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,27 +24,29 @@ const HomeScreen = () => {
   );
 };
 
+const LoadingScreen = () => (
+  <View style={styles.container}>
+    <ActivityIndicator size="large" />
+  </View>
+);
+
 const PerfilScreen = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
 
-  const [email, setEmail] = useState(null);
-  const [registered, setRegistered] = useState(null);
-  const [name, setName] = useState(null);
-  const [lastName, setLastName] = useState(null);
-  const [biography, setBio] = useState(null)
+  const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     if (currentUser) {
       getUserInformation(currentUser)
         .then((userData) => {
-          setEmail(userData.email);
-          setRegistered(userData.registeredAt.toDate().toISOString().substring(0, 10));
-          setName(userData.name);
-          setLastName(userData.lastName);
-          setBio(userData.biography);
+          setUserData(userData);
         })
         .catch((error) => {
           console.error('Error fetching user information:', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   }, [currentUser]);
@@ -59,15 +61,19 @@ const PerfilScreen = ({ navigation }) => {
       });
   };
 
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>¡Bienvenido usuario!</Text>
       <Text>Si estás aquí, ¡tienes permiso para estarlo!</Text>
-      <Text>Email: {email}</Text>
-      <Text>Date of register: {registered}</Text>
-      <Text>Name: {name}</Text>
-      <Text>Last name: {lastName}</Text>
-      <Text>Bio: {biography}</Text>
+      <Text>Email: {userData.email}</Text>
+      <Text>Date of register: {userData.registeredAt.toDate().toISOString().substring(0, 10)}</Text>
+      <Text>Name: {userData.name}</Text>
+      <Text>Last name: {userData.lastName}</Text>
+      <Text>Bio: {userData.biography}</Text>
       <Button title="Logout" onPress={handleLogout} />
     </View>
   );
