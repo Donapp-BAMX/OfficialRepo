@@ -4,6 +4,7 @@
     "slug": "banmx",
     "version": "1.0.0",
     "orientation": "portrait",
+    "plugins": ["@config-plugins/detox"], 
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {

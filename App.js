@@ -7,6 +7,7 @@ import RegisterScreen from './RegisterScreen';
 import LoginScreen from './LoginScreen';
 import HomeScreen from './HomeScreen';
 import ForgotPassword from './forgotPassword';
+import FoodRegister from './FoodRegister';
 import { AuthProvider } from './authContext';
 
 const Stack = createStackNavigator();
@@ -42,6 +43,13 @@ export default function App() {
             component={ForgotPassword}
             options={{
               title: 'Forgot Password',
+            }}
+          />
+          <Stack.Screen
+            name="FoodRegister"
+            component={FoodRegister} // Agrega la pantalla FoodRegister
+            options={{
+              title: 'Food Register',
             }}
           />
         </Stack.Navigator>
