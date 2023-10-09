@@ -1,8 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, addDoc, collection, Timestamp, getDocs } from "firebase/firestore";
-
-import { sendPasswordResetEmail } from 'firebase/auth';
+import {sendPasswordResetEmail } from 'firebase/auth';
 
 import {
     getAuth,
@@ -70,6 +69,7 @@ export const resetPassword = (email) => {
   return sendPasswordResetEmail(auth, email); // Utiliza sendPasswordResetEmail para enviar el correo de restablecimiento
 };
 
+
 // Funcion para guardar anuncios en firestore
 export const saveAnuncio = async (title, description) => {
   const anunciosCollection = collection(db, "anuncios");
@@ -99,4 +99,21 @@ export const getAnuncios = async () => {
   });
 
   return anuncios;
+// Función para agregar alimentos a Firebase
+export const addFoodToFirebase = async (foodData) => {
+  try {
+    const foodCollectionRef = collection(db, 'foods');
+
+    // Agregar la fecha de registro
+    const foodDataWithTimestamp = {
+      ...foodData,
+      registeredAt: Timestamp.fromDate(new Date()),
+    };
+
+    const newFoodDocRef = await addDoc(foodCollectionRef, foodDataWithTimestamp);
+
+    return newFoodDocRef.id; // Devuelve el ID del documento creado
+  } catch (error) {
+    throw error;
+  }
 };
