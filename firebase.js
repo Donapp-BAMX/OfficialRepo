@@ -89,6 +89,9 @@ export const saveAnuncio = async (title, description) => {
 };
 
 // Función para obtener todos los anuncios desde Firestore
+// ... previous code ...
+
+// Función para obtener todos los anuncios desde Firestore
 export const getAnuncios = async () => {
   const anunciosCollection = collection(db, "anuncios");
   const querySnapshot = await getDocs(anunciosCollection);
@@ -99,6 +102,8 @@ export const getAnuncios = async () => {
   });
 
   return anuncios;
+}; // <- Add a closing brace for the getAnuncios function
+
 // Función para agregar alimentos a Firebase
 export const addFoodToFirebase = async (foodData) => {
   try {
