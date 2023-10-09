@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { registerUser } from './firebase'; 
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
+import verificarContrasena from './verificarContrasena';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -53,7 +54,7 @@ const RegisterScreen = () => {
   };
 
   const handleSubmit = () => {
-    if (!email || !password || password !== verifyPassword) {
+    if (!email || !password || password !== verifyPassword || !verificarContrasena(password)) { // Verifica la contraseña aquí
       alert('Por favor, completa todos los campos y verifica las contraseñas.');
       return;
     }
