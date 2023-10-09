@@ -13,7 +13,7 @@ import {
 import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase'; // Importa getAnuncios
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import FoodRegister from './FoodRegister';
+import DonationView from './DonationScreen'
 
 const Tab = createBottomTabNavigator();
 
@@ -179,19 +179,17 @@ const VoluntarioScreen = () => {
   );
 };
 
-const DonacionScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Pantalla de Voluntario</Text>
-    </View>
-  );
+const DonationScreen = () => {
+  return <DonationView />;
 };
+
+
 
 const TabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Principal" component={HomeScreen} />
-      <Tab.Screen name="Donaciones" component={FoodRegister} /> 
+      <Tab.Screen name="Donaciones" component={DonationScreen} /> 
       <Tab.Screen name="Perfil" component={PerfilScreen} />
       <Tab.Screen name="Voluntario" component={VoluntarioScreen} />
     </Tab.Navigator>
