@@ -46,8 +46,11 @@ const HomeScreen = () => {
   }, [currentUser]);
 
   const handleCreateAd = () => {
+    setTitle('');
+    setDescription('');
     setShowCreateAdForm(true);
   };
+  
 
   const handleCloseCreateAdForm = () => {
     setShowCreateAdForm(false);
@@ -57,8 +60,18 @@ const HomeScreen = () => {
     try {
       await saveAnuncio(title, description);
       setShowCreateAdForm(false);
+      await updateAnunciosList();
     } catch (error) {
       console.error('Error al guardar el anuncio:', error);
+    }
+  };
+
+  const updateAnunciosList = async () => {
+    try {
+      const anunciosData = await getAnuncios();
+      setAnuncios(anunciosData);
+    } catch (error) {
+      console.error('Error fetching anuncios:', error);
     }
   };
 

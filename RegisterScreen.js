@@ -54,7 +54,7 @@ const RegisterScreen = () => {
   };
 
   const handleSubmit = () => {
-    if (!email || !password || password !== verifyPassword || !verificarContrasena(password)) { // Verifica la contraseña aquí
+    if (!email || !password || password !== verifyPassword || !verificarContrasena(password)) {
       alert('Por favor, completa todos los campos y verifica las contraseñas.');
       return;
     }
