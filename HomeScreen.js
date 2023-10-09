@@ -34,16 +34,27 @@ const HomeScreen = () => {
         .catch((error) => {
           console.error('Error fetching user information:', error);
         });
-
+  
       getAnuncios()
         .then((anunciosData) => {
-          setAnuncios(anunciosData);
+          // Ordena los anuncios por fecha de creación en orden descendente
+          const orderedAnuncios = anunciosData.sort((a, b) => {
+            return b.createdAt - a.createdAt;
+          });
+  
+          setAnuncios(orderedAnuncios);
         })
         .catch((error) => {
           console.error('Error fetching anuncios:', error);
         });
     }
   }, [currentUser]);
+
+  const orderAnunciosByDate = (anunciosData) => {
+    return anunciosData.sort((a, b) => {
+      return b.createdAt - a.createdAt;
+    });
+  };
 
   const handleCreateAd = () => {
     setTitle('');

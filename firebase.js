@@ -98,11 +98,14 @@ export const getAnuncios = async () => {
   const anuncios = [];
 
   querySnapshot.forEach((doc) => {
-    anuncios.push({ id: doc.id, ...doc.data() });
+    const anuncioData = doc.data();
+    // Agrega una propiedad "createdAt" con la fecha actual (puedes ajustar esto según tus necesidades)
+    anuncioData.createdAt = new Date().getTime();
+    anuncios.push({ id: doc.id, ...anuncioData });
   });
 
   return anuncios;
-}; // <- Add a closing brace for the getAnuncios function
+};
 
 // Función para agregar alimentos a Firebase
 export const addFoodToFirebase = async (foodData) => {
