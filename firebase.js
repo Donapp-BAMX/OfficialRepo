@@ -99,8 +99,6 @@ export const getAnuncios = async () => {
 
   querySnapshot.forEach((doc) => {
     const anuncioData = doc.data();
-    // Agrega una propiedad "createdAt" con la fecha actual (puedes ajustar esto según tus necesidades)
-    anuncioData.createdAt = new Date().getTime();
     anuncios.push({ id: doc.id, ...anuncioData });
   });
 

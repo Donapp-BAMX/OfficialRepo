@@ -23,7 +23,10 @@ const HomeScreen = () => {
   const [showCreateAdForm, setShowCreateAdForm] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [anuncios, setAnuncios] = useState([]); // Estado para almacenar los anuncios
+  const [anuncios, setAnuncios] = useState([]);
+  const [isAnuncioModalVisible, setIsAnuncioModalVisible] = useState(false);
+  const [selectedAnuncio, setSelectedAnuncio] = useState(null);
+
 
   useEffect(() => {
     if (currentUser) {
@@ -71,7 +74,15 @@ const HomeScreen = () => {
     try {
       await saveAnuncio(title, description);
       setShowCreateAdForm(false);
-      await updateAnunciosList();
+  
+      // Obtén la lista actual de anuncios
+      const currentAnuncios = [...anuncios];
+  
+      // Agrega el nuevo anuncio al principio de la lista
+      currentAnuncios.unshift({ title, description, createdAt: new Date().getTime() });
+  
+      // Actualiza el estado con la nueva lista de anuncios
+      setAnuncios(currentAnuncios);
     } catch (error) {
       console.error('Error al guardar el anuncio:', error);
     }
@@ -119,7 +130,6 @@ const HomeScreen = () => {
         </View>
       </Modal>
 
-      {/* Lista de Anuncios */}
       <FlatList
         data={anuncios}
         keyExtractor={(item) => item.id}
@@ -127,8 +137,8 @@ const HomeScreen = () => {
           <TouchableOpacity
             style={styles.anuncioItem}
             onPress={() => {
-              // Manejar la apertura de anuncio o navegación a detalles
-              console.log("Abre el anuncio:", item.title);
+              setSelectedAnuncio(item);
+              setIsAnuncioModalVisible(true);
             }}
           >
             <Text style={styles.anuncioTitle}>{item.title}</Text>
@@ -136,6 +146,18 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
       />
+
+      <Modal visible={isAnuncioModalVisible} animationType="slide">
+        <View style={styles.modalContainer}>
+          {selectedAnuncio && (
+            <>
+              <Text style={styles.anuncioTitle}>{selectedAnuncio.title}</Text>
+              <Text style={styles.anuncioDescription}>{selectedAnuncio.description}</Text>
+              <Button title="Cerrar" onPress={() => setIsAnuncioModalVisible(false)} />
+            </>
+          )}
+        </View>
+      </Modal>
     </View>
   );
 };
