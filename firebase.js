@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, Timestamp } from 'firebase/firestore';
+import {sendPasswordResetEmail } from 'firebase/auth';
 
-import { sendPasswordResetEmail } from 'firebase/auth';
 
 import {
     getAuth,
@@ -68,4 +68,23 @@ export const getUserInformation = async (currentUser) => {
 export const resetPassword = (email) => {
   const auth = getAuth(); // Obtén una instancia de Auth
   return sendPasswordResetEmail(auth, email); // Utiliza sendPasswordResetEmail para enviar el correo de restablecimiento
+};
+
+// Función para agregar alimentos a Firebase
+export const addFoodToFirebase = async (foodData) => {
+  try {
+    const foodCollectionRef = collection(db, 'foods');
+
+    // Agregar la fecha de registro
+    const foodDataWithTimestamp = {
+      ...foodData,
+      registeredAt: Timestamp.fromDate(new Date()),
+    };
+
+    const newFoodDocRef = await addDoc(foodCollectionRef, foodDataWithTimestamp);
+
+    return newFoodDocRef.id; // Devuelve el ID del documento creado
+  } catch (error) {
+    throw error;
+  }
 };

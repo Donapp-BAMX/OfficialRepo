@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet, ActivityIndicator  } from 'react-native
 import { logoutUser, getUserInformation } from './firebase';
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import FoodRegister from './FoodRegister';
 
 const Tab = createBottomTabNavigator();
 
@@ -99,7 +100,7 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Principal" component={HomeScreen} />
-      <Tab.Screen name="Donacion" component={DonacionScreen} />
+      <Tab.Screen name="Donaciones" component={FoodRegister} /> 
       <Tab.Screen name="Perfil" component={PerfilScreen} />
       <Tab.Screen name="Voluntario" component={VoluntarioScreen} />
     </Tab.Navigator>
