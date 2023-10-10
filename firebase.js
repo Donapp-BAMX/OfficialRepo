@@ -15,6 +15,8 @@ import {
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { updateDoc, setDoc } from "firebase/firestore";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCTtuXMWzxMhH5_Boa8EHH_e_mxAbCQ9NQ",
@@ -68,4 +70,30 @@ export const getUserInformation = async (currentUser) => {
 export const resetPassword = (email) => {
   const auth = getAuth(); // Obtén una instancia de Auth
   return sendPasswordResetEmail(auth, email); // Utiliza sendPasswordResetEmail para enviar el correo de restablecimiento
+};
+
+// Función para marcar al usuario como voluntario
+export const setAsVolunteer = async (userId) => {
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, {
+      isVolunteer: true
+  });
+};
+
+// Función para quitar la marca de voluntario al usuario
+export const unsetAsVolunteer = async (userId) => {
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, {
+      isVolunteer: false
+  });
+};
+
+// Función para obtener el estado de voluntario del usuario
+export const checkVolunteerStatus = async (userId) => {
+  const userRef = doc(db, "users", userId);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+      return userSnap.data().isVolunteer;
+  }
+  return false;
 };
