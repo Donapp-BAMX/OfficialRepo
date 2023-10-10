@@ -7,9 +7,7 @@ function DonationView() {
   const navigation = useNavigation();
 
   const handleDonateMoney = () => {
-    const url = 'https://donate.stripe.com/test_fZedUQ8QE4LG49ybII';
-    Linking.openURL(url)
-      .catch((error) => console.error('Error al abrir el enlace: ', error));
+    navigation.navigate('Cart'); // Assuming you have a 'Cart' screen defined for your 'cart' component
   };
 
   const handleTDonateFood = () => {

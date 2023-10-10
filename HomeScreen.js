@@ -14,6 +14,7 @@ import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './fire
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DonationView from './DonationScreen'
+import VolunteerScreen from './VolunteerScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -172,18 +173,12 @@ const PerfilScreen = ({ navigation }) => {
 };
 
 const VoluntarioScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Pantalla de Voluntario</Text>
-    </View>
-  );
+  return <VolunteerScreen />;
 };
 
 const DonationScreen = () => {
   return <DonationView />;
 };
-
-
 
 const TabNavigator = () => {
   return (

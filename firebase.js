@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, addDoc, collection, Timestamp, getDocs } from "firebase/firestore";
 import {sendPasswordResetEmail } from 'firebase/auth';
+import { updateDoc } from 'firebase/firestore';
 
 import {
     getAuth,
@@ -121,4 +122,30 @@ export const addFoodToFirebase = async (foodData) => {
   } catch (error) {
     throw error;
   }
+};
+
+// Función para marcar al usuario como voluntario
+export const setAsVolunteer = async (userId) => {
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, {
+      isVolunteer: true
+  });
+};
+
+// Función para quitar la marca de voluntario al usuario
+export const unsetAsVolunteer = async (userId) => {
+  const userRef = doc(db, "users", userId);
+  await updateDoc(userRef, {
+      isVolunteer: false
+  });
+};
+
+// Función para obtener el estado de voluntario del usuario
+export const checkVolunteerStatus = async (userId) => {
+  const userRef = doc(db, "users", userId);
+  const userSnap = await getDoc(userRef);
+  if (userSnap.exists()) {
+      return userSnap.data().isVolunteer;
+  }
+  return false;
 };
