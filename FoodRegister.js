@@ -7,7 +7,7 @@ import { addFoodToFirebase } from './firebase';
 const FoodRegister = () => {
   const [foodName, setFoodName] = useState('');
   const [calories, setCalories] = useState('');
-  const [expirationDate, setExpirationDate] = useState(new Date()); // Cambia a un estado de fecha
+  const [expirationDate, setExpirationDate] = useState(new Date());
   const [foodType, setFoodType] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);

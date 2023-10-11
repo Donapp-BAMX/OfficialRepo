@@ -1,20 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  FlatList,
-} from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
 import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase'; // Importa getAnuncios
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DonationView from './DonationScreen'
-import Anuncios from './/notificationSection';
+import Anuncios from './anunciosSection';
+import VoluntarioSection from './voluntarioSection';
 
 const Tab = createBottomTabNavigator();
 
@@ -85,9 +76,7 @@ const PerfilScreen = ({ navigation }) => {
 
 const VoluntarioScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Pantalla de Voluntario</Text>
-    </View>
+    <VoluntarioSection />
   );
 };
 

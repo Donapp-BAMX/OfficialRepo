@@ -107,18 +107,21 @@ const RegisterScreen = () => {
         onChangeText={handleNameChange}
         placeholder="Ingresa tu nombre"
         style={styles.input}
+        data-test="name"
       />
       <TextInput
         value={lastName}
         onChangeText={handleLastNameChange}
         placeholder="Ingresa tu apellido"
         style={styles.input}
+        data-test="lastName"
       />
       <TextInput
         value={email}
         onChangeText={handleEmail}
         placeholder="Ingresa tu correo electrónico"
         style={styles.input}
+        data-test="email"
       />
       <TextInput
         value={password}
@@ -126,6 +129,7 @@ const RegisterScreen = () => {
         placeholder="Ingresa tu contraseña"
         secureTextEntry={true}
         style={styles.input}
+        data-test="password"
       />
       <TextInput
         value={verifyPassword}
@@ -133,6 +137,7 @@ const RegisterScreen = () => {
         placeholder="Verifica tu contraseña"
         secureTextEntry={true}
         style={styles.input}
+        data-test="verifyPassword"
       />
       <TextInput
         value={biography}
@@ -141,13 +146,14 @@ const RegisterScreen = () => {
         multiline={true}
         numberOfLines={5}
         style={[styles.input, { height: 100 }]}
+        data-test="biography"
       />
       <Text style={styles.label}>Género seleccionado: {selectedGender}</Text>
       <Button title="Seleccionar Género" onPress={handleOpenModal} />
       <Button title="Enviar" onPress={handleSubmit} />
       <Text style={styles.signInText}>
         ¿Ya tienes una cuenta? Por favor,
-        <Text style={{ color: '#293462', fontWeight: 'bold' }} onPress={handleSignInPress}>
+        <Text style={{ color: '#293462', fontWeight: 'bold' }} onPress={handleSignInPress} data-test="back-to-login">
           {' '}
           inicia sesión
         </Text>

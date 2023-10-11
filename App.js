@@ -9,6 +9,8 @@ import HomeScreen from './HomeScreen';
 import ForgotPassword from './forgotPassword';
 import FoodRegister from './FoodRegister';
 import { AuthProvider } from './authContext';
+import VoluntarioSection from './voluntarioSection';
+
 
 const Stack = createStackNavigator();
 
@@ -50,6 +52,13 @@ export default function App() {
             component={FoodRegister} // Agrega la pantalla FoodRegister
             options={{
               title: 'Food Register',
+            }}
+          />
+          <Stack.Screen
+            name="VoluntarioSection"
+            component={VoluntarioSection}
+            options={{
+              title: 'Voluntario Section',
             }}
           />
         </Stack.Navigator>
