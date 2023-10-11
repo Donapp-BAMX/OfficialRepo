@@ -1,9 +1,9 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, addDoc, collection, Timestamp, getDocs, updateDoc } from "firebase/firestore";
-import {sendPasswordResetEmail } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -143,59 +143,7 @@ export const updateVolunteerStatus = async (currentUser, isVolunteer) => {
   }
 };
 
-// Función para guardar tareas en Firestore
-export const saveTarea = async (title, startDate, endDate, encargo) => {
-  const tareasCollection = collection(db, "tareas");
-  const currentDate = Timestamp.now();
-
-  try {
-    await addDoc(tareasCollection, {
-      title,
-      startDate,
-      endDate,
-      encargo,
-      creationDate: currentDate,
-    });
-    console.log("Tarea guardada exitosamente.");
-  } catch (error) {
-    console.error("Error al guardar la tarea:", error);
-    throw error;
-  }
-};
-
-// Función para obtener todas las tareas desde Firestore
-export const getTareas = async () => {
-  const tareasCollection = collection(db, "tareas");
-  const querySnapshot = await getDocs(tareasCollection);
-  const tareas = [];
-
-  querySnapshot.forEach((doc) => {
-    tareas.push({ id: doc.id, ...doc.data() });
-  });
-
-  return tareas;
-};
-
-// Resto de tu componente VoluntarioSection
-
-const handleSaveTask = async () => {
-  try {
-    await saveTarea(title, startDate, endDate, encargo);
-    setShowCreateTaskForm(false);
-
-    // Actualiza la lista actual de tareas
-    const currentTareas = [...tareas];
-
-    // Agrega la nueva tarea al principio de la lista
-    currentTareas.unshift({ title, startDate, endDate, encargo, createdAt: new Date().getTime() });
-
-    // Actualiza el estado con la nueva lista de tareas
-    setTareas(currentTareas);
-  } catch (error) {
-    console.error('Error al guardar la tarea:', error);
-  }
-};
-
+// Funcion para confirmar que el usuario deja de ser voluntario
 const confirmLeaveVolunteer = () => {
   updateVolunteerStatus(currentUser, false)
     .then(() => {
@@ -204,4 +152,28 @@ const confirmLeaveVolunteer = () => {
     .catch((error) => {
       console.error('Error al dejar de ser voluntario:', error);
     });
+};
+
+// Función para registrar o desregistrar al usuario como voluntario en Firebase
+export const toggleVolunteerStatus = async (currentUser, isVolunteer) => {
+  if (!currentUser) {
+    throw new Error("El usuario actual es nulo");
+  }
+
+  const userDocRef = doc(db, "users", currentUser);
+
+  try {
+    // Obtén el documento del usuario
+    const userDoc = await getDoc(userDocRef);
+
+    // Actualiza el valor de voluntario en el documento
+    if (userDoc.exists()) {
+      await updateDoc(userDocRef, {
+        voluntario: isVolunteer,
+      });
+    }
+  } catch (error) {
+    console.error("Error al actualizar el valor de voluntario:", error);
+    throw error;
+  }
 };
