@@ -84,8 +84,6 @@ const DonationScreen = () => {
   return <DonationView />;
 };
 
-
-
 const TabNavigator = () => {
   return (
     <Tab.Navigator>
