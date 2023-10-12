@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { registerUser } from './firebase'; 
+import { registerUser } from './firebase';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import verificarContrasena from './verificarContrasena';
@@ -106,21 +106,21 @@ const RegisterScreen = () => {
         value={name}
         onChangeText={handleNameChange}
         placeholder="Ingresa tu nombre"
-        style={styles.input}
+        style={styles.inputNombre} // Estilo para el nombre
         data-test="name"
       />
       <TextInput
         value={lastName}
         onChangeText={handleLastNameChange}
         placeholder="Ingresa tu apellido"
-        style={styles.input}
+        style={styles.inputApellido} // Estilo para el apellido
         data-test="lastName"
       />
       <TextInput
         value={email}
         onChangeText={handleEmail}
         placeholder="Ingresa tu correo electrónico"
-        style={styles.input}
+        style={styles.inputMail} // Estilo para el correo electrónico
         data-test="email"
       />
       <TextInput
@@ -128,7 +128,7 @@ const RegisterScreen = () => {
         onChangeText={handlePassword}
         placeholder="Ingresa tu contraseña"
         secureTextEntry={true}
-        style={styles.input}
+        style={styles.inputPassword} // Estilo para la contraseña
         data-test="password"
       />
       <TextInput
@@ -136,7 +136,7 @@ const RegisterScreen = () => {
         onChangeText={handleVerifyPassword}
         placeholder="Verifica tu contraseña"
         secureTextEntry={true}
-        style={styles.input}
+        style={styles.inputVerifyPassword} // Estilo para verificar contraseña
         data-test="verifyPassword"
       />
       <TextInput
@@ -145,7 +145,7 @@ const RegisterScreen = () => {
         placeholder="Escribe tu biografía (máx. 500 palabras)"
         multiline={true}
         numberOfLines={5}
-        style={[styles.input, { height: 100 }]}
+        style={styles.inputBiography} // Estilo para la biografía
         data-test="biography"
       />
       <Text style={styles.label}>Género seleccionado: {selectedGender}</Text>
@@ -182,13 +182,59 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
   },
-  input: {
+  inputNombre: {
     width: '80%',
     height: 40,
     borderWidth: 1,
     borderColor: 'gray',
     marginBottom: 20,
     padding: 10,
+    borderRadius: 20,
+  },
+  inputApellido: {
+    width: '80%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+  },
+  inputMail: {
+    width: '80%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+  },
+  inputPassword: {
+    width: '80%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+  },
+  inputVerifyPassword: {
+    width: '80%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+  },
+  inputBiography: {
+    width: '80%',
+    height: 100,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
   },
   label: {
     fontSize: 16,
