@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@config-plugins/detox": "^6.0.0",
+    "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^19.0.0",
     "@react-native-community/datetimepicker": "^7.6.0",
     "@react-native-picker/picker": "^2.5.1",
@@ -30,6 +31,7 @@
     "react-native": "0.72.5",
     "react-native-datepicker": "^1.7.2",
     "react-native-dropdown-picker": "^5.4.6",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-web": "~0.19.6",
     "react-router-dom": "^6.16.0",
     "stripe": "^13.9.0"

@@ -18,47 +18,47 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name="Register"
             component={RegisterScreen}
             options={{
-              title: 'Register',
+              title: '',
             }}
           />
           <Stack.Screen
             name="Login"
             component={LoginScreen}
             options={{
-              title: 'Login',
+              title: '',
             }}
           />
           <Stack.Screen
             name="Home"
             component={HomeScreen}
             options={{
-              title: 'Home',
+              title: '',
             }}
           />
           <Stack.Screen
             name="ForgotPassword"
             component={ForgotPassword}
             options={{
-              title: 'Forgot Password',
+              title: '',
             }}
           />
           <Stack.Screen
             name="FoodRegister"
             component={FoodRegister} // Agrega la pantalla FoodRegister
             options={{
-              title: 'Food Register',
+              title: '',
             }}
           />
           <Stack.Screen
             name="VoluntarioSection"
             component={VoluntarioSection}
             options={{
-              title: 'Voluntario Section',
+              title: '',
             }}
           />
         </Stack.Navigator>
