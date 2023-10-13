@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Modal } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Modal, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { registerUser } from './firebase';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
@@ -54,16 +54,15 @@ const RegisterScreen = () => {
   };
 
   const handleSubmit = () => {
-    if (!email || !password || password !== verifyPassword || !verificarContrasena(password)) { // Verifica la contraseña aquí
+    if (!email || !password || password !== verifyPassword || !verificarContrasena(password)) {
       alert('Por favor, completa todos los campos y verifica las contraseñas.');
       return;
     }
-  
+
     registerUser(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-  
-        // Agregar usuario a Firestore
+
         const userData = {
           email: email,
           registeredAt: Timestamp.fromDate(new Date()),
@@ -72,15 +71,13 @@ const RegisterScreen = () => {
           biography: biography,
           gender: selectedGender,
         };
-  
-        // Utiliza la UID del usuario autenticado para crear la referencia del documento
+
         const userDocRef = doc(db, 'users', user.uid);
-  
+
         setDoc(userDocRef, userData)
           .then(() => {
             alert('¡Usuario creado con éxito!');
-            // Redirige al usuario a la pestaña de inicio de sesión (login)
-            navigation.navigate('Login'); // Esto debería funcionar correctamente ahora
+            navigation.navigate('Login');
           })
           .catch((error) => {
             alert('Error al agregar datos a Firestore: ' + error.message);
@@ -106,21 +103,21 @@ const RegisterScreen = () => {
         value={name}
         onChangeText={handleNameChange}
         placeholder="Ingresa tu nombre"
-        style={styles.inputNombre} // Estilo para el nombre
+        style={styles.inputNombre}
         data-test="name"
       />
       <TextInput
         value={lastName}
         onChangeText={handleLastNameChange}
         placeholder="Ingresa tu apellido"
-        style={styles.inputApellido} // Estilo para el apellido
+        style={styles.inputApellido}
         data-test="lastName"
       />
       <TextInput
         value={email}
         onChangeText={handleEmail}
         placeholder="Ingresa tu correo electrónico"
-        style={styles.inputMail} // Estilo para el correo electrónico
+        style={styles.inputMail}
         data-test="email"
       />
       <TextInput
@@ -128,7 +125,7 @@ const RegisterScreen = () => {
         onChangeText={handlePassword}
         placeholder="Ingresa tu contraseña"
         secureTextEntry={true}
-        style={styles.inputPassword} // Estilo para la contraseña
+        style={styles.inputPassword}
         data-test="password"
       />
       <TextInput
@@ -136,7 +133,7 @@ const RegisterScreen = () => {
         onChangeText={handleVerifyPassword}
         placeholder="Verifica tu contraseña"
         secureTextEntry={true}
-        style={styles.inputVerifyPassword} // Estilo para verificar contraseña
+        style={styles.inputVerifyPassword}
         data-test="verifyPassword"
       />
       <TextInput
@@ -145,15 +142,25 @@ const RegisterScreen = () => {
         placeholder="Escribe tu biografía (máx. 500 palabras)"
         multiline={true}
         numberOfLines={5}
-        style={styles.inputBiography} // Estilo para la biografía
+        style={styles.inputBiography}
         data-test="biography"
       />
-      <Text style={styles.label}>Género seleccionado: {selectedGender}</Text>
-      <Button title="Seleccionar Género" onPress={handleOpenModal} />
-      <Button title="Enviar" onPress={handleSubmit} />
+      <View style={styles.genderContainer}>
+        <Text style={styles.label}>Género seleccionado: {selectedGender}</Text>
+        <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+          <Button
+            title="Seleccionar Género"
+            onPress={handleOpenModal}
+            style={styles.genderButton}
+          />
+        </View>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Enviar" onPress={handleSubmit} color="white" />
+      </View>
       <Text style={styles.signInText}>
         ¿Ya tienes una cuenta? Por favor,
-        <Text style={{ color: '#293462', fontWeight: 'bold' }} onPress={handleSignInPress} data-test="back-to-login">
+        <Text style={{ color: 'red', fontWeight: 'bold' }} onPress={handleSignInPress} data-test="back-to-login">
           {' '}
           inicia sesión
         </Text>
@@ -168,6 +175,7 @@ const RegisterScreen = () => {
           </View>
         </View>
       </Modal>
+      <Image source={require('./img/empresa.png')} style={styles.image} />
     </View>
   );
 };
@@ -179,8 +187,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    fontSize: 24,
-    marginBottom: 20,
+    fontSize: 30,
+    marginTop: 70,
+    marginBottom: 30,
+    fontWeight: 'bold',
   },
   inputNombre: {
     width: '80%',
@@ -235,10 +245,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     borderRadius: 20,
+    marginLeft: 10,
   },
   label: {
     fontSize: 16,
     marginBottom: 10,
+    marginTop: 20,
   },
   signInText: {
     fontSize: 12,
@@ -254,6 +266,28 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
+  },
+  buttonContainer: {
+    width: '80%',
+    borderWidth: 1,
+    borderColor: 'green',
+    backgroundColor: 'green',
+    marginBottom: 20,
+    marginTop: 20,
+    borderRadius: 20,
+    height: '6%',
+    justifyContent: 'center',
+  },
+  genderContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+    marginBottom: 20,
+  },
+  image: {
+    width: 90,
+    height: 30,
+    marginTop: 60,
   },
 });
 
