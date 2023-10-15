@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   logo: {
-    width: 170,
-    height: 240,
+    width: 175,
+    height: 244,
     marginBottom: 30,
   },
   heading: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 20,
     height: '6%',
-    justifyContent: 'center', // Centra verticalmente el botón
+    justifyContent: 'center',
   },
   button: {
     backgroundColor: 'green',
