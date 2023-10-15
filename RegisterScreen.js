@@ -45,6 +45,7 @@ const RegisterScreen = () => {
   };
 
   const handleCloseModal = () => {
+    setSelectedGender('Seleccionar Género');
     setModalVisible(false);
   };
 
@@ -146,12 +147,11 @@ const RegisterScreen = () => {
         data-test="biography"
       />
       <View style={styles.genderContainer}>
-        <Text style={styles.label}>Género seleccionado: {selectedGender}</Text>
-        <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+        <View style={styles.GenderOptions}>
           <Button
-            title="Seleccionar Género"
+            title={selectedGender || 'Seleccionar Género'}
             onPress={handleOpenModal}
-            style={styles.genderButton}
+            color="green"
           />
         </View>
       </View>
@@ -165,13 +165,13 @@ const RegisterScreen = () => {
           inicia sesión
         </Text>
       </Text>
-      <Modal visible={isModalVisible} transparent={true} animationType="slide">
+      <Modal visible={isModalVisible} transparent={true} animationType="fade">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Button title="Hombre" onPress={() => handleGenderSelection('Hombre')} />
-            <Button title="Mujer" onPress={() => handleGenderSelection('Mujer')} />
-            <Button title="Otro" onPress={() => handleGenderSelection('Otro')} />
-            <Button title="Cancelar" onPress={handleCloseModal} />
+            <Button title="Hombre" onPress={() => handleGenderSelection('Hombre')} color="green" />
+            <Button title="Mujer" onPress={() => handleGenderSelection('Mujer')} color="green" />
+            <Button title="Otro" onPress={() => handleGenderSelection('Otro')} color="green" />
+            <Button title="Cancelar" onPress={handleCloseModal} color="red" />
           </View>
         </View>
       </Modal>
@@ -247,11 +247,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: 10,
   },
-  label: {
-    fontSize: 16,
-    marginBottom: 10,
-    marginTop: 20,
-  },
   signInText: {
     fontSize: 12,
     marginTop: 20,
@@ -275,7 +270,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
     borderRadius: 20,
-    height: '6%',
+    height: 40,
     justifyContent: 'center',
   },
   genderContainer: {
@@ -288,6 +283,13 @@ const styles = StyleSheet.create({
     width: 90,
     height: 30,
     marginTop: 60,
+  },
+  GenderOptions: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 20,
   },
 });
 
