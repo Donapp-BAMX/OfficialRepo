@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Linking } from 'react-native';
 
@@ -13,87 +13,53 @@ function DonationView() {
   };
 
   const handleTDonateFood = () => {
-    navigation.navigate('FoodRegister');  };
-  
+    navigation.navigate('FoodRegister');
+  };
 
-    return (
-      <ImageBackground source={require('./assets/nino.jpg')} style={styles.backgroundImage}>
-        <View style={styles.container}>
-          <TouchableOpacity style={styles.customButton} onPress={handleDonateMoney}>
-            <Text style={styles.buttonText}>Donar Dinero</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.customButton} onPress={handleTDonateFood}>
-            <Text style={styles.buttonText}>Donar Comida</Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    );
-};  
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={handleDonateMoney}>
+        <Text style={styles.buttonText}>Donar Dinero</Text>
+        <Image source={require('./img/creditCard.png')} style={styles.imageCreditCard} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonContainer} onPress={handleTDonateFood}>
+        <Text style={styles.buttonText}>Donar Comida</Text>
+        <Image source={require('./img/food.png')} style={styles.imageFood} />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
   },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    opacity: 0.7,
-  },
-  profileImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-  nameText: {
-    fontSize: 24,
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'left',
-    marginBottom: 5,
-    marginTop: 5,
-  },
-  mainHeading: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  infoBox: {
-    borderWidth: 2,
-    borderColor: '#000000',
-    paddingTop: 10,  // Ajuste del padding superior
-    paddingBottom: 10,  // Ajuste del padding inferior
-    paddingHorizontal: 10,  // Padding horizontal
-    width: '80%',
-    marginBottom: 20,
-    borderRadius: 15,
-  },
-  customButton: {
-    backgroundColor: '#FFD700',
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+  buttonContainer: {
+    width: 250,
+    height: 60,
+    borderWidth: 1,
+    borderColor: 'black',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-    elevation: 10,
-    marginBottom: 5,
-    marginTop: 5,
+    marginBottom: 20,
+    paddingHorizontal: 10,
   },
   buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+    textAlign: 'left',
+    flex: 1,
+    fontSize: 18,
+  },
+  imageCreditCard: {
+    width: 70,
+    height: 40,
+  },
+  imageFood: {
+    width: 55,
+    height: 55,
+    marginRight: 5,
   },
 });
 
