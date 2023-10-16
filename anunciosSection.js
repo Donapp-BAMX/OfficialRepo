@@ -79,7 +79,6 @@ const Anuncios = ({ currentUser }) => {
 
       <Modal visible={showCreateAdForm} animationType="slide">
         <View style={styles.modalContainer}>
-          {/* Formulario de Creación de Anuncios */}
           <Text>Título del anuncio:</Text>
           <TextInput
             placeholder="Título"
