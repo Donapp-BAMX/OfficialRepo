@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 50,
     marginBottom: 20,
-    marginTop: 100,
+    marginTop: 400,
   },
   nameText: {
     fontSize: 24,
@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
     elevation: 10,
-    marginTop: 200,
-    marginBottom: 90,
+    marginTop: 100,
+    marginBottom: 280,
   },
   buttonText: {
     fontSize: 16,

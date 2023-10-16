@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Image} from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { logoutUser, getUserInformation, updateVolunteerStatus } from './firebase';
 import { AuthContext } from './authContext';
 
 const LoadingScreen = () => (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" />
-    </View>
+  <View style={styles.container}>
+    <ActivityIndicator size="large" color="#FFD700" />
+  </View>
 );
 
 const VoluntarioSection = ({ navigation }) => {
@@ -39,37 +39,29 @@ const VoluntarioSection = ({ navigation }) => {
           console.error('Error al registrarse como voluntario:', error);
         });
     } else {
-      Alert.alert(
-        'Confirmación',
-        '¿Quieres dejar de ser voluntario?',
-        [
-          {
-            text: 'No',
-            style: 'cancel',
+      Alert.alert('Confirmación', '¿Quieres dejar de ser voluntario?', [
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+        {
+          text: 'Sí',
+          onPress: () => {
+            updateVolunteerStatus(currentUser, false)
+              .then(() => {
+                setIsVolunteer(false);
+              })
+              .catch((error) => {
+                console.error('Error al dejar de ser voluntario:', error);
+              });
           },
-          {
-            text: 'Sí',
-            onPress: () => {
-              updateVolunteerStatus(currentUser, false)
-                .then(() => {
-                  setIsVolunteer(false);
-                })
-                .catch((error) => {
-                  console.error('Error al dejar de ser voluntario:', error);
-                });
-            },
-          },
-        ]
-      );
+        },
+      ]);
     }
   };
 
   if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <Image source={require('./assets/giph.gif')} style={{ width: 200, height: 200 }} />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (
@@ -120,7 +112,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   mainHeading: {
     fontSize: 32,
