@@ -78,6 +78,40 @@ const FoodRegister = () => {
     { label: 'Otros', value: 'otros' },
   ];
 
+  const inputContainer = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+  };
+
+  const buttonContainer = {
+    width: '80%',
+    marginTop: 40,
+    borderWidth: 1,
+    borderColor: 'green',
+    backgroundColor: 'green',
+    marginBottom: 20,
+    borderRadius: 20,
+    height: 40,
+    justifyContent: 'center',
+  };
+
+  const backButtonContainer = {
+    width: '80%',
+    borderWidth: 1,
+    borderColor: 'lightred',
+    backgroundColor: 'lightred',
+    marginBottom: 20,
+    borderRadius: 20,
+    height: 40,
+    justifyContent: 'center',
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Registrar Alimento</Text>
@@ -85,17 +119,17 @@ const FoodRegister = () => {
         value={foodName}
         onChangeText={handleFoodNameChange}
         placeholder="Nombre del alimento"
-        style={styles.input}
+        style={inputContainer}
       />
       <TextInput
         value={calories}
         onChangeText={handleCaloriesChange}
         placeholder="Calorías"
         keyboardType="numeric"
-        style={styles.input}
+        style={inputContainer}
       />
       <View style={styles.datePickerContainer}>
-        <Text>Fecha de caducidad: </Text>
+        <Text style={styles.expirationDateText}>Fecha de caducidad: </Text>
         <DateTimePicker
           value={expirationDate}
           mode="date"
@@ -121,11 +155,15 @@ const FoodRegister = () => {
         value={description}
         onChangeText={handleDescriptionChange}
         placeholder="Descripción del alimento"
-        style={styles.input}
+        style={[inputContainer, { height: 100 }]}
         multiline
       />
-      <Button title="Registrar" onPress={handleSubmit} disabled={isSubmitting} />
-      <Button title="Volver" onPress={handleBackPress} />
+      <TouchableOpacity style={buttonContainer} onPress={handleSubmit} disabled={isSubmitting}>
+        <Text style={{ textAlign: 'center', color: 'white' }}>Registrar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={backButtonContainer} onPress={handleBackPress}>
+        <Text style={{ textAlign: 'center', color: 'white' }}>Volver</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -137,16 +175,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    fontSize: 24,
-    marginBottom: 20,
+    fontSize: 30,
+    marginBottom: 70,
+    fontWeight: 'bold',
   },
   input: {
     width: '80%',
-    height: 40,
     borderWidth: 1,
     borderColor: 'gray',
     marginBottom: 20,
     padding: 10,
+    borderRadius: 20,
   },
   datePickerContainer: {
     flexDirection: 'row',
@@ -166,8 +205,11 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
   },
+  expirationDateText: {
+    color: 'green',
+  },
   selectedFoodTypeButton: {
-    backgroundColor: 'lightblue',
+    backgroundColor: 'lightgreen',
   },
 });
 
