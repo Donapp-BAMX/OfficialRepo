@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity} from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Image} from 'react-native';
 import { logoutUser, getUserInformation, updateVolunteerStatus } from './firebase';
 import { AuthContext } from './authContext';
 
@@ -65,7 +65,11 @@ const VoluntarioSection = ({ navigation }) => {
   };
 
   if (isLoading) {
-    return <LoadingScreen />;
+    return (
+      <View style={styles.container}>
+        <Image source={require('./assets/giph.gif')} style={{ width: 200, height: 200 }} />
+      </View>
+    );
   }
 
   return (

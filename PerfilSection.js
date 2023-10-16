@@ -38,7 +38,7 @@ const PerfilSection = ({ navigation }) => {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" />
+      <Image source={require('./assets/giph.gif')} style={{ width: 200, height: 200 }} />
       </View>
     );
   }
@@ -49,9 +49,21 @@ const PerfilSection = ({ navigation }) => {
       <Text style={styles.mainHeading}>{userData.name}{userData.lastName}</Text>
 
       <View style={styles.infoBox}>
-        <Text style={styles.description}>Email: {userData.email}</Text>
-        <Text style={styles.description}>Bio: {userData.biography}</Text>
-        <Text style={styles.description}>Date of register: {userData.registeredAt.toDate().toISOString().substring(0, 10)}</Text>
+
+      <View style={styles.emailContainer}>
+      <Text style={styles.descriptionTwo}>Email</Text>
+      <Text style={styles.emailValue}>{userData.email}</Text>
+      </View>
+
+      <View style={styles.emailContainer}>
+      <Text style={styles.descriptionTwo}>Bio</Text>
+      <Text style={styles.emailValue}>{userData.biography}</Text>
+      </View>
+
+      <View style={styles.emailContainer}>
+      <Text style={styles.descriptionTwo}>Fecha de Regist</Text>
+      <Text style={styles.emailValue}>{userData.registeredAt.toDate().toISOString().substring(0, 10)}</Text>
+      </View>
       </View>
 
       <TouchableOpacity style={styles.customButton} onPress={handleLogout}>
@@ -83,6 +95,13 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 5,
     marginTop: 5,
+  },
+  descriptionTwo: {
+    fontSize: 16,
+    textAlign: 'left',
+    marginBottom: 5,
+    marginTop: 5,
+    fontWeight: 'bold',
   },
   mainHeading: {
     fontSize: 32,
@@ -118,6 +137,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
+  emailContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  emailValue: {
+    fontSize: 16,
+    textAlign: 'right',
+  }
 });
 
 export default PerfilSection;
