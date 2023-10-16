@@ -1,59 +1,143 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
-import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase'; // Importa getAnuncios
-import { AuthContext } from './authContext';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import DonationView from './DonationScreen'
-import Anuncios from './anunciosSection';
-import VoluntarioSection from './voluntarioSection';
-import PerfilSection from './PerfilSection';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { useNavigation } from '@react-navigation/native';
+import { addFoodToFirebase } from './firebase';
 
-const Tab = createBottomTabNavigator();
+const FoodRegister = () => {
+  const [foodName, setFoodName] = useState('');
+  const [calories, setCalories] = useState('');
+  const [expirationDate, setExpirationDate] = useState(new Date());
+  const [foodType, setFoodType] = useState('');
+  const [description, setDescription] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const HomeScreen = () => {
-  const { currentUser } = useContext(AuthContext);
+  const handleFoodNameChange = (text) => {
+    setFoodName(text);
+  };
+
+  const handleCaloriesChange = (text) => {
+    setCalories(text);
+  };
+
+  const handleExpirationDateChange = (event, selectedDate) => {
+    setExpirationDate(selectedDate || expirationDate);
+  };
+
+  const handleFoodTypeChange = (type) => {
+    setFoodType(type);
+  };
+
+  const handleDescriptionChange = (text) => {
+    setDescription(text);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+
+      if (!foodName || !calories || !expirationDate || !foodType || !description) {
+        alert('Por favor, completa todos los campos.');
+        return;
+      }
+
+      const foodData = {
+        name: foodName,
+        calories: parseInt(calories),
+        expirationDate,
+        foodType,
+        description,
+      };
+
+      const foodId = await addFoodToFirebase(foodData);
+
+      alert(`Alimento registrado con éxito. ID: ${foodId}`);
+
+      setFoodName('');
+      setCalories('');
+      setExpirationDate(new Date());
+      setFoodType('');
+      setDescription('');
+    } catch (error) {
+      alert('Error al registrar el alimento: ' + error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const navigation = useNavigation();
+
+  const handleBackPress = () => {
+    navigation.goBack();
+  };
+
+  const foodTypes = [
+    { label: 'Fruta/Verdura', value: 'fruta_verdura' },
+    { label: 'Abrefácil', value: 'abrefacil' },
+    { label: 'Lata', value: 'lata' },
+    { label: 'Otros', value: 'otros' },
+  ];
+
+  const inputContainer = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+  };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Anuncios currentUser={currentUser} />
+    <View style={styles.container}>
+      <Text style={styles.heading}>Registrar Alimento</Text>
+      <TextInput
+        value={foodName}
+        onChangeText={handleFoodNameChange}
+        placeholder="Nombre del alimento"
+        style={inputContainer}
+      />
+      <TextInput
+        value={calories}
+        onChangeText={handleCaloriesChange}
+        placeholder="Calorías"
+        keyboardType="numeric"
+        style={inputContainer}
+      />
+      <View style={styles.datePickerContainer}>
+        <Text style={styles.expirationDateText}>Fecha de caducidad: </Text>
+        <DateTimePicker
+          value={expirationDate}
+          mode="date"
+          display="default"
+          onChange={handleExpirationDateChange}
+        />
+      </View>
+      <View style={styles.foodTypeButtons}>
+        {foodTypes.map((type) => (
+          <TouchableOpacity
+            key={type.value}
+            style={[
+              styles.foodTypeButton,
+              foodType === type.value ? styles.selectedFoodTypeButton : {},
+            ]}
+            onPress={() => handleFoodTypeChange(type.value)}
+          >
+            <Text>{type.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <TextInput
+        value={description}
+        onChangeText={handleDescriptionChange}
+        placeholder="Descripción del alimento"
+        style={[inputContainer, { height: 100 }]}
+        multiline
+      />
+      <Button title="Registrar" onPress={handleSubmit} disabled={isSubmitting} />
+      <Button title="Volver" onPress={handleBackPress} />
     </View>
-  );
-};
-
-const LoadingScreen = () => (
-  <View style={styles.container}>
-    <ActivityIndicator size="large" />
-  </View>
-);
-
-const PerfilScreen = ({ navigation }) => { 
-  const { currentUser } = useContext(AuthContext);
-
-  return (
-    <View style={{ flex: 1 }}>
-      <PerfilSection currentUser={currentUser} navigation={navigation} />
-    </View>
-  );
-};
-
-const VoluntarioScreen = () => {
-  return (
-    <VoluntarioSection />
-  );
-};
-
-const DonationScreen = () => {
-  return <DonationView />;
-};
-
-const TabNavigator = () => {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="Principal" component={HomeScreen} />
-      <Tab.Screen name="Donaciones" component={DonationScreen} /> 
-      <Tab.Screen name="Perfil" component={PerfilScreen} />
-      <Tab.Screen name="Voluntario" component={VoluntarioScreen} />
-    </Tab.Navigator>
   );
 };
 
@@ -67,46 +151,40 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
   },
-  createAdButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: 'blue',
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  createAdButtonText: {
-    color: 'white',
-    fontSize: 30,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   input: {
     width: '80%',
-    marginBottom: 10,
-    padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-  },
-  anuncioItem: {
+    borderColor: 'gray',
+    marginBottom: 20,
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderRadius: 20,
   },
-  anuncioTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  datePickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  anuncioDescription: {
-    fontSize: 16,
+  foodTypeButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+    marginBottom: 20,
+  },
+  expirationDateText: {
+    color: "green",
+  },
+  foodTypeButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    marginLeft: 1,
+    marginRight: 1,
+    alignItems: 'center',
+  },
+  selectedFoodTypeButton: {
+    backgroundColor: 'lightblue',
   },
 });
 
-export default TabNavigator;
+export default FoodRegister;
