@@ -91,7 +91,7 @@ const FoodRegister = () => {
 
   const buttonContainer = {
     width: '80%',
-    marginTop: 40,
+    marginTop: 50,
     borderWidth: 1,
     borderColor: 'green',
     backgroundColor: 'green',
@@ -102,12 +102,7 @@ const FoodRegister = () => {
   };
 
   const backButtonContainer = {
-    width: '80%',
-    borderWidth: 1,
-    borderColor: 'lightred',
-    backgroundColor: 'lightred',
     marginBottom: 20,
-    borderRadius: 20,
     height: 40,
     justifyContent: 'center',
   };
@@ -162,7 +157,7 @@ const FoodRegister = () => {
         <Text style={{ textAlign: 'center', color: 'white' }}>Registrar</Text>
       </TouchableOpacity>
       <TouchableOpacity style={backButtonContainer} onPress={handleBackPress}>
-        <Text style={{ textAlign: 'center', color: 'white' }}>Volver</Text>
+        <Text style={{ textAlign: 'center', color: 'red' }}>Volver</Text>
       </TouchableOpacity>
     </View>
   );
@@ -178,6 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     marginBottom: 70,
     fontWeight: 'bold',
+    marginTop: 60,
   },
   input: {
     width: '80%',
