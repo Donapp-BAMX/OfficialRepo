@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { loginUser } from './firebase';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
@@ -8,7 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const handleEmail = (text) => {
@@ -29,15 +30,23 @@ const LoginScreen = () => {
       return;
     }
 
+    setIsLoading(true);
+
     loginUser(email, password)
       .then((userCredential) => {
-        alert('¡Inicio de sesión exitoso!');
         navigation.navigate('Home');
       })
       .catch((error) => {
-        alert('¡Algo salió mal! Verifica tus credenciales.');
+        Alert.alert('¡Credenciales erroneas!');
         const errorCode = error.code;
-        console.log(errorCode);
+        if (errorCode === 'auth/wrong-password' || errorCode === 'auth/user-not-found') {
+          Alert.alert('¡Algo salió mal! Verifica tus credenciales.');
+        } else {
+          console.log(errorCode);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -51,10 +60,7 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('./img/logo.png')}
-        style={styles.logo}
-      />
+      <Image source={require('./img/logo.png')} style={styles.logo} />
       <Text style={styles.heading}>Inicio de Sesión</Text>
       <View style={styles.inputContainer}>
         <AntDesign name="user" size={24} color="black" style={styles.icon} />
@@ -71,16 +77,11 @@ const LoginScreen = () => {
           value={password}
           onChangeText={handlePassword}
           placeholder="Ingresa tu contraseña"
-          secureTextEntry={!showPassword} // Mostrar/ocultar contraseña según el estado
+          secureTextEntry={!showPassword}
           style={styles.inputPassword}
         />
         <TouchableOpacity onPress={handleTogglePasswordVisibility} style={styles.iconContainer}>
-          <FontAwesome
-            name={showPassword ? 'eye' : 'eye-slash'}
-            size={24}
-            color="black"
-            style={styles.eyeIcon}
-          />
+          <FontAwesome name={showPassword ? 'eye' : 'eye-slash'} size={24} color="black" style={styles.eyeIcon} />
         </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
@@ -105,10 +106,13 @@ const LoginScreen = () => {
         <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
       </TouchableOpacity>
 
-      <Image
-        source={require('./img/empresa.png')}
-        style={styles.empresaLogo}
-      />
+      <Image source={require('./img/empresa.png')} style={styles.empresaLogo} />
+
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFD700" />
+        </View>
+      )}
     </View>
   );
 };
@@ -186,6 +190,12 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     fontSize: 24,
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
 });
 
