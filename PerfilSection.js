@@ -14,11 +14,11 @@ const PerfilSection = ({ navigation }) => {
       getUserInformation(currentUser)
         .then((userData) => {
           setUserData(userData);
-          setIsLoading(false); // Mark loading as complete when user data is fetched
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error('Error fetching user information:', error);
-          setIsLoading(false); // Mark loading as complete even in case of error
+          setIsLoading(false);
         });
     }
   }, [currentUser]);
