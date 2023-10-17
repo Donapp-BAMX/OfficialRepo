@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { resetPassword } from './firebase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ForgotPassword = () => {
   const [resetEmail, setResetEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const handleResetPassword = () => {
@@ -13,7 +14,9 @@ const ForgotPassword = () => {
       alert('Por favor, ingresa una dirección de correo electrónico válida.');
       return;
     }
-  
+
+    setIsLoading(true);
+
     resetPassword(resetEmail)
       .then(() => {
         alert('Correo de restablecimiento de contraseña enviado con éxito. Verifica tu correo electrónico.');
@@ -22,7 +25,14 @@ const ForgotPassword = () => {
       .catch((error) => {
         alert('Error al enviar el correo de restablecimiento de contraseña. Verifica tu dirección de correo electrónico.');
         console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
+  };
+
+  const handleBackToLogin = () => {
+    navigation.navigate('Login');
   };
 
   return (
@@ -40,6 +50,14 @@ const ForgotPassword = () => {
       </View>
       <View style={styles.buttonContainer}>
         <Button title="Enviar Correo de Restablecimiento" onPress={handleResetPassword} color="white" />
+      </View>
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFD700" />
+        </View>
+      )}
+      <View style={styles.backButtonContainer}>
+        <Button title="Volver" onPress={handleBackToLogin} color="red" />
       </View>
       <Image source={require('./img/empresa.png')} style={styles.empresaLogo} />
     </View>
@@ -67,7 +85,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     borderRadius: 20,
-    height: '6%',
   },
   buttonContainer: {
     width: '80%',
@@ -76,7 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     marginBottom: 20,
     borderRadius: 20,
-    height: '6%',
+    height: 40,
     justifyContent: 'center',
   },
   icon: {
@@ -97,6 +114,16 @@ const styles = StyleSheet.create({
     width: 90,
     height: 30,
     marginTop: 240,
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  backButtonContainer: {
+    position: 'absolute',
+    bottom: 270,
   },
 });
 

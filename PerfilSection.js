@@ -1,4 +1,3 @@
-// PerfilSection.js
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Button, Image, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
 import { AuthContext } from './authContext';
@@ -15,11 +14,10 @@ const PerfilSection = ({ navigation }) => {
       getUserInformation(currentUser)
         .then((userData) => {
           setUserData(userData);
+          setIsLoading(false);
         })
         .catch((error) => {
           console.error('Error fetching user information:', error);
-        })
-        .finally(() => {
           setIsLoading(false);
         });
     }
@@ -37,8 +35,8 @@ const PerfilSection = ({ navigation }) => {
 
   if (isLoading) {
     return (
-      <View style={styles.container}>
-      <Image source={require('./assets/giph.gif')} style={{ width: 200, height: 200 }} />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FFD700" />
       </View>
     );
   }
@@ -46,24 +44,23 @@ const PerfilSection = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={require('./assets/perfil.png')} style={styles.profileImage} />
-      <Text style={styles.mainHeading}>{userData.name}{userData.lastName}</Text>
+      <Text style={styles.mainHeading}>{userData.name} {userData.lastName}</Text>
 
       <View style={styles.infoBox}>
+        <View style={styles.emailContainer}>
+          <Text style={styles.descriptionTwo}>Email</Text>
+          <Text style={styles.emailValue}>{userData.email}</Text>
+        </View>
 
-      <View style={styles.emailContainer}>
-      <Text style={styles.descriptionTwo}>Email</Text>
-      <Text style={styles.emailValue}>{userData.email}</Text>
-      </View>
+        <View style={styles.emailContainer}>
+          <Text style={styles.descriptionTwo}>Bio</Text>
+          <Text style={styles.emailValue}>{userData.biography}</Text>
+        </View>
 
-      <View style={styles.emailContainer}>
-      <Text style={styles.descriptionTwo}>Bio</Text>
-      <Text style={styles.emailValue}>{userData.biography}</Text>
-      </View>
-
-      <View style={styles.emailContainer}>
-      <Text style={styles.descriptionTwo}>Fecha de Regist</Text>
-      <Text style={styles.emailValue}>{userData.registeredAt.toDate().toISOString().substring(0, 10)}</Text>
-      </View>
+        <View style={styles.emailContainer}>
+          <Text style={styles.descriptionTwo}>Fecha de Registro</Text>
+          <Text style={styles.emailValue}>{userData.registeredAt.toDate().toISOString().substring(0, 10)}</Text>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.customButton} onPress={handleLogout}>
@@ -80,11 +77,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   profileImage: {
     width: 200,
     height: 200,
     borderRadius: 50,
     marginBottom: 20,
+    marginTop: 400,
   },
   nameText: {
     fontSize: 24,
@@ -112,9 +115,9 @@ const styles = StyleSheet.create({
   infoBox: {
     borderWidth: 2,
     borderColor: '#000000',
-    paddingTop: 10,  // Ajuste del padding superior
-    paddingBottom: 10,  // Ajuste del padding inferior
-    paddingHorizontal: 10,  // Padding horizontal
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
     width: '80%',
     marginBottom: 20,
     borderRadius: 15,
@@ -131,6 +134,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
     elevation: 10,
+    marginTop: 100,
+    marginBottom: 280,
   },
   buttonText: {
     fontSize: 16,
@@ -146,7 +151,7 @@ const styles = StyleSheet.create({
   emailValue: {
     fontSize: 16,
     textAlign: 'right',
-  }
+  },
 });
 
 export default PerfilSection;

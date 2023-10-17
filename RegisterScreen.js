@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Modal, Image } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Modal, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { registerUser } from './firebase';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
@@ -15,6 +15,7 @@ const RegisterScreen = () => {
   const [biography, setBiography] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedGender, setSelectedGender] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmail = (text) => {
     setEmail(text);
@@ -60,6 +61,8 @@ const RegisterScreen = () => {
       return;
     }
 
+    setIsLoading(true);
+
     registerUser(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -79,21 +82,25 @@ const RegisterScreen = () => {
           .then(() => {
             alert('¡Usuario creado con éxito!');
             navigation.navigate('Login');
+            setIsLoading(false);
           })
           .catch((error) => {
             alert('Error al agregar datos a Firestore: ' + error.message);
+            setIsLoading(false);
           });
       })
       .catch((error) => {
         alert('¡Algo salió mal! Verifica tus credenciales.');
         const errorCode = error.code;
         console.log(errorCode);
+        setIsLoading(false);
       });
   };
 
   const navigation = useNavigation();
 
   const handleSignInPress = () => {
+    setIsLoading(false);
     navigation.navigate('Login');
   };
 
@@ -176,6 +183,11 @@ const RegisterScreen = () => {
         </View>
       </Modal>
       <Image source={require('./img/empresa.png')} style={styles.image} />
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFD700" />
+        </View>
+      )}
     </View>
   );
 };
@@ -185,6 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fff',
   },
   heading: {
     fontSize: 30,
@@ -290,6 +303,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     borderRadius: 20,
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
 });
 
