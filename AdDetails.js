@@ -15,10 +15,7 @@ const AdDetails = ({ route, navigation }) => {
           title="Regresar"
           buttonStyle={styles.button}
           titleStyle={styles.buttonTitle}
-          //onPress={() => navigation.navigate('HomeScreen.js')}
-          //quiero que me regrese a homsecreen.js
             onPress={() => navigation.goBack()}
-
         />
       </Card>
     </View>

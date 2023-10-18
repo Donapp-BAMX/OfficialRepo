@@ -12,6 +12,8 @@ import { AuthProvider } from './authContext';
 import VoluntarioSection from './voluntarioSection';
 import Anuncios from './anunciosSection'; // Importa el componente Anuncios
 import AdDetails from './AdDetails'; // Importa el componente AdDetails
+import volunteerTasks from './volunteerTasks';
+import TaskDetail from './taskDetail';
 
 const Stack = createStackNavigator();
 
@@ -67,6 +69,20 @@ export default function App() {
             component={Anuncios} // Agrega la pantalla Anuncios
             options={{
               title: 'Anuncios',
+            }}
+          />
+          <Stack.Screen
+            name="VolunteerTasks"
+            component={volunteerTasks}
+            options={{
+              title: '',
+            }}
+          />
+          <Stack.Screen
+            name="TaskDetail"
+            component={TaskDetail}
+            options={{
+              title: '',
             }}
           />
           <Stack.Screen

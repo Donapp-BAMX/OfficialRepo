@@ -87,6 +87,24 @@ export const saveAnuncio = async (title, description) => {
   }
 };
 
+// Funcion para guardar tareas en firestore
+export const saveTasks = async (title, description) => {
+  const tasksCollection = collection(db, "tareas");
+  const currentDate = Timestamp.now();
+
+  try {
+    await addDoc(tasksCollection, {
+      title,
+      description,
+      creationDate: currentDate,
+    });
+    console.log("Tarea asignada exitosamente.");
+  } catch (error) {
+    console.error("Error al guardar la tarea:", error);
+    throw error;
+  }
+};
+
 // Función para obtener todos los anuncios desde Firestore
 export const getAnuncios = async () => {
   const anunciosCollection = collection(db, "anuncios");
@@ -98,6 +116,19 @@ export const getAnuncios = async () => {
   });
 
   return anuncios;
+};
+
+// Función para obtener todos los anuncios desde Firestore
+export const getTasks = async () => {
+  const tasksCollection = collection(db, "tareas");
+  const querySnapshot = await getDocs(tasksCollection);
+  const tasks = [];
+
+  querySnapshot.forEach((doc) => {
+    tasks.push({ id: doc.id, ...doc.data() });
+  });
+
+  return tasks;
 };
 
 // Función para agregar alimentos a Firebase
@@ -174,6 +205,45 @@ export const toggleVolunteerStatus = async (currentUser, isVolunteer) => {
     }
   } catch (error) {
     console.error("Error al actualizar el valor de voluntario:", error);
+    throw error;
+  }
+};
+
+// Función para actualizar el valor de currentVol de tasks en Firestore
+export const tasksCollection = collection(db, "tareas");
+export const updateTask = async (taskId, updatedData) => {
+  try {
+    const taskRef = doc(tasksCollection, taskId);
+
+    await updateDoc(taskRef, updatedData);
+
+    // Consulta para obtener los datos actualizados
+    const updatedTask = await getDoc(taskRef);
+    return { id: taskId, ...updatedTask.data() };
+  } catch (error) {
+    console.error('Error al actualizar la tarea:', error);
+    throw error;
+  }
+};
+
+//Función para actualizar si el usuario se le asigno una tarea
+export const updateTaskAssigned = async (currentUser, isAssigned) => {
+  if (!currentUser) {
+    throw new Error('El usuario actual es nulo');
+  }
+
+  const userDocRef = doc(db, 'users', currentUser);
+
+  try {
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      await updateDoc(userDocRef, {
+        taskAssigned: isAssigned,
+      });
+    }
+  } catch (error) {
+    console.error('Error al actualizar el valor de asignación', error);
     throw error;
   }
 };
