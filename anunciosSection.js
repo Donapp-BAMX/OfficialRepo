@@ -79,9 +79,6 @@ const Anuncios = ({ currentUser }) => {
           <ActivityIndicator size="large" color="#FFD700" />
         </View>
       )}
-      <View style={styles.background}>
-        {/* Degradado sutil de color de rojo a amarillo en el fondo */}
-      </View>
       <FlatList
         data={anuncios}
         keyExtractor={(item) => item.id}

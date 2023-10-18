@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Card, Button } from 'react-native-elements';
-import { getCurrentUser, updateTask, updateTaskAssigned } from './firebase';
+import { getCurrentUser, getTasks, updateTask, updateTaskAssigned } from './firebase';
+
+const LoadingScreen = () => (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color="#FFD700" />
+    </View>
+  );
 
 const TaskDetail = ({ route }) => {
     const navigation = useNavigation();
@@ -10,9 +16,23 @@ const TaskDetail = ({ route }) => {
     const [isAssigned, setIsAssigned] = useState(false);
     const [currentVolunteers, setCurrentVolunteers] = useState(anuncio.currentVol);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    if (isLoading) {
+        return <LoadingScreen />;
+    }
 
     useEffect(() => {
-        // Check if the user is assigned to this task and update isAssigned.
+        getTasks()
+           .then(() => {
+            console.log("loading")
+        })
+            .catch((error) => {
+            console.error('Error fetching user information:', error);
+        })
+            .finally(() => {
+            setIsLoading(false);
+        });
     }, [currentUser, anuncio.id]);
 
     const handleBackPress = () => {
@@ -42,7 +62,6 @@ const TaskDetail = ({ route }) => {
     const handleUnregister = () => {
         if (isAssigned) {
             const newCurrentVolunteers = currentVolunteers - 1;
-            setIsButtonDisabled(true);
             updateTask(anuncio.id, { currentVol: newCurrentVolunteers })
                 .then(() => {
                     setCurrentVolunteers(newCurrentVolunteers);
