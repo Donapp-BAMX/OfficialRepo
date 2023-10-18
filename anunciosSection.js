@@ -13,7 +13,7 @@ import {
 import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase';
 import { AuthContext } from './authContext';
 import { useNavigation } from '@react-navigation/native';
-import { Card } from 'react-native-elements'; // Importa el componente Card de react-native-elements
+import { Card, Input, Button as RNEButton } from 'react-native-elements'; // Importa el componente Card, Input y Button de react-native-elements
 
 const Anuncios = ({ currentUser }) => {
   const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
@@ -100,22 +100,32 @@ const Anuncios = ({ currentUser }) => {
       ) : null}
       <Modal visible={showCreateAdForm} animationType="slide">
         <View style={styles.modalContainer}>
-          <Text>Título del anuncio:</Text>
-          <TextInput
-            placeholder="Título"
+          <Input
+            placeholder="Título del anuncio"
             value={title}
             onChangeText={(text) => setTitle(text)}
-            style={styles.input}
+            inputContainerStyle={styles.inputContainer}
+            containerStyle={styles.inputField} // Centra el campo de entrada
           />
-          <Text>Descripción del anuncio:</Text>
-          <TextInput
-            placeholder="Descripción"
+          <Input
+            placeholder="Descripción del anuncio"
             value={description}
             onChangeText={(text) => setDescription(text)}
-            style={styles.input}
+            inputContainerStyle={styles.inputContainer}
+            containerStyle={styles.inputField} // Centra el campo de entrada
           />
-          <Button title="Guardar Anuncio" onPress={handleSaveAd} />
-          <Button title="Cancelar" onPress={handleCloseCreateAdForm} />
+          <RNEButton
+            title="Guardar Anuncio"
+            buttonStyle={styles.saveButton}
+            titleStyle={styles.saveButtonText}
+            onPress={handleSaveAd}
+          />
+          <RNEButton
+            title="Cancelar"
+            buttonStyle={styles.cancelButton}
+            titleStyle={styles.cancelButtonText}
+            onPress={handleCloseCreateAdForm}
+          />
         </View>
       </Modal>
     </View>
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
   },
   createAdButton: {
     position: 'absolute',
-    bottom: 10, // Mover el botón hacia abajo
+    bottom: 10,
     right: 10,
     backgroundColor: 'blue',
     borderRadius: 25,
@@ -153,13 +163,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  input: {
+  inputContainer: {
     width: '80%',
     marginBottom: 10,
-    padding: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
+  },
+  inputField: {
+    width: '100%', // Centra el campo de entrada
+  },
+  saveButton: {
+    backgroundColor: '#FFD700', // Baja el tono de amarillo
+    borderRadius: 25, // Añade redondez a los botones
+    marginTop: 10, // Crea profundidad
+  },
+  saveButtonText: {
+    color: 'black',
+  },
+  cancelButton: {
+    backgroundColor: '#FFD700', // Baja el tono de amarillo
+    borderRadius: 25, // Añade redondez a los botones
+    marginTop: 10, // Crea profundidad
+  },
+  cancelButtonText: {
+    color: 'black',
   },
   anuncioItem: {
     padding: 10,
