@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Linking } from 'react-native';
 
 function DonationView() {
   const navigation = useNavigation();
-  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const handleDonateMoney = () => {
     const url = 'https://donate.stripe.com/test_fZedUQ8QE4LG49ybII';
@@ -17,41 +16,42 @@ function DonationView() {
     navigation.navigate('FoodRegister');
   };
 
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  
   const handleImageLoad = () => {
-    setIsImageLoading(false);
+    setImagesLoaded(true);
   };
 
   return (
     <View style={styles.fullScreen}>
-      {isImageLoading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FFD700" />
-        </View>
-      )}
-      <ImageBackground
-        source={require('./assets/nino.jpg')}
-        style={styles.backgroundImage}
-        onLoad={handleImageLoad}
-      >
-        {!isImageLoading && (
-          <View style={styles.container}>
-            <View style={styles.headingContainer}>
-              <Text style={styles.mainHeading}>¿Qué desea donar?</Text>
-            </View>
-
-            <View style={styles.buttonsContainer}>
-              <TouchableOpacity style={styles.customButton} onPress={handleDonateMoney}>
-                <Text style={styles.buttonText}>Donar Dinero</Text>
-                <Image source={require('./img/creditCard.png')} style={styles.imageCreditCard} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.customButton} onPress={handleTDonateFood}>
-                <Text style={styles.buttonText}>Donar Comida</Text>
-                <Image source={require('./img/food.png')} style={styles.imageFood} />
-              </TouchableOpacity>
-            </View>
+      <View style={styles.container}>
+        { !imagesLoaded && 
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#FFD700" />
           </View>
-        )}
-      </ImageBackground>
+        }
+        <View style={styles.headingContainer}>
+          <Text style={styles.mainHeading}>¿Qué desea donar?</Text>
+        </View>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.customButton} onPress={handleDonateMoney}>
+            <Text style={styles.buttonText}>Dinero</Text>
+            <Image 
+              source={require('./img/creditCard.png')} 
+              style={styles.imageCreditCard} 
+              onLoad={handleImageLoad}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.customButton} onPress={handleTDonateFood}>
+            <Text style={styles.buttonText}>Alimentos</Text>
+            <Image 
+              source={require('./img/food.png')} 
+              style={styles.imageFood} 
+              onLoad={handleImageLoad}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
@@ -59,47 +59,42 @@ function DonationView() {
 const styles = StyleSheet.create({
   fullScreen: {
     flex: 1,
+    backgroundColor: '#FFFFFF', // Ya es blanco por defecto
   },
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    opacity: 0.7,
   },
   loadingContainer: {
     ...StyleSheet.absoluteFill,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Hacemos la animación de carga un poco más opaca
   },
   headingContainer: {
-    marginBottom: 10,
-    marginTop: 80,
+    marginBottom: 5,
+    marginTop: 5,
   },
   buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   mainHeading: {
     fontSize: 32,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
-    color: '#ffffff',
+    marginBottom: 50,
+    color: '#000000',
   },
   customButton: {
     backgroundColor: '#FFD700',
     borderRadius: 25,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     alignItems: 'center',
     justifyContent: 'space-between',
     shadowColor: '#000',
@@ -107,9 +102,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
     elevation: 10,
-    marginBottom: 10,
-    marginTop: 10,
-    width: 250,
+    marginBottom: 5,
+    marginTop: 5,
+    marginRight: 10,
+    marginLeft: 10,
+    width: 170,
     height: 60,
     flexDirection: 'row',
   },
@@ -120,7 +117,7 @@ const styles = StyleSheet.create({
   imageFood: {
     width: 55,
     height: 55,
-    marginRight: 5,
+    marginRight: -3,
   },
   buttonText: {
     fontSize: 16,

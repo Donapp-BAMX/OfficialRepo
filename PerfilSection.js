@@ -53,7 +53,7 @@ const PerfilSection = ({ navigation }) => {
       {isLoaded && (
         <>
           <Image source={require('./assets/perfil.png')} style={styles.profileImage} />
-          <Text style={styles.mainHeading}>{userData.name} {userData.lastName}</Text>
+          <Text style={styles.mainHeading}>{userData.name}{userData.lastName}</Text>
 
           <View style={styles.infoBox}>
             <View style={styles.emailContainer}>

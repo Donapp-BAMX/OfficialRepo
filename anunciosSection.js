@@ -93,7 +93,7 @@ const Anuncios = ({ currentUser }) => {
       />
       {hasIdTrabajo ? (
         <TouchableOpacity
-          style={[styles.createAdButton, { backgroundColor: 'green' }]}
+          style={[styles.createAdButton, { backgroundColor: '#FFD700' }]}
           onPress={handleCreateAd}
         >
           <Text style={styles.createAdButtonText}>+</Text>
@@ -103,7 +103,7 @@ const Anuncios = ({ currentUser }) => {
         <View style={styles.modalContainer}>
           <View style={styles.inputContainer1}>
             <Input
-              placeholder="Título del anuncio"
+              placeholder="Titulo del anuncio"
               value={title}
               onChangeText={(text) => setTitle(text)}
               inputContainerStyle={{ borderBottomWidth: 0 }}
@@ -121,12 +121,13 @@ const Anuncios = ({ currentUser }) => {
               inputStyle={{ textAlignVertical: 'center', color: 'black', fontSize: 16, marginTop: 20, placeholderTextColor: '#888' }}
             />
           </View>
-          <RNEButton
-            title="Guardar Anuncio"
-            buttonStyle={styles.saveButton}
-            titleStyle={styles.saveButtonText}
-            onPress={handleSaveAd}
-          />
+    
+
+
+            <TouchableOpacity style={styles.customButton} onPress={handleSaveAd}>
+            <Text style={styles.buttonText}>Guardar Anuncio</Text>
+            </TouchableOpacity>
+    
           <RNEButton
             title="Cancelar"
             buttonStyle={[styles.cancelButton, { backgroundColor: 'transparent', borderWidth: 0 }]}
@@ -154,7 +155,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: 'green',
     borderRadius: 25,
     width: 50,
     height: 50,
@@ -162,8 +162,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   createAdButtonText: {
-    color: 'white',
+    color: 'black',
     fontSize: 30,
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 5,
+    marginRight: 5,
   },
   modalContainer: {
     flex: 1,
@@ -181,17 +185,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     marginTop: 60,
+    height: '6%',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
   },
   inputContainer2: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '80%',
     height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
     marginBottom: 20,
     padding: 10,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'gray',
+    height: '6%',
   },
   saveButton: {
     backgroundColor: '#FFD700',
@@ -204,8 +215,25 @@ const styles = StyleSheet.create({
   cancelButton: {
     marginTop: 10,
   },
+  customButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+    marginTop: 0,
+    marginBottom: 40,
+  },
   cancelButtonText: {
     color: 'red',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   anuncioItem: {
     padding: 10,
