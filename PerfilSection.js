@@ -44,7 +44,7 @@ const PerfilSection = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image source={require('./assets/perfil.png')} style={styles.profileImage} />
-      <Text style={styles.mainHeading}>{userData.name} {userData.lastName}</Text>
+      <Text style={styles.mainHeading}>{userData.name}{userData.lastName}</Text>
 
       <View style={styles.infoBox}>
         <View style={styles.emailContainer}>

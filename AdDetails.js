@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 
 const AdDetails = ({ route, navigation }) => {
@@ -11,12 +11,9 @@ const AdDetails = ({ route, navigation }) => {
         <Card.Title style={styles.title}>{title}</Card.Title>
         <Card.Divider />
         <Text style={styles.description}>{description}</Text>
-        <Button
-          title="Regresar"
-          buttonStyle={styles.button}
-          titleStyle={styles.buttonTitle}
-            onPress={() => navigation.goBack()}
-        />
+      <TouchableOpacity style={styles.customButton} onPress={() => navigation.goBack()}>
+        <Text style={styles.buttonText}>Regresar</Text>
+      </TouchableOpacity>
       </Card>
     </View>
   );
@@ -29,26 +26,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: {
-    width: '80%',
+    width: '90%',
     borderRadius: 10,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
+    marginBottom: 12,
   },
   description: {
     fontSize: 18,
-    marginTop: 10,
+    marginTop: 0,
+    marginBottom: 3,
     color: 'black',
     textAlign: 'center',
   },
-  button: {
-    backgroundColor: 'yellow',
-    marginTop: 10, // Agregamos espacio entre el texto y el botón
+  customButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+    marginTop: 10,
+    marginBottom: 0,
   },
-  buttonTitle: {
-    color: 'red',
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
   },
 });
 
