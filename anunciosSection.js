@@ -10,8 +10,9 @@ import {
   TextInput,
   FlatList,
 } from 'react-native';
-import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase'; // Importa getAnuncios
+import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase';
 import { AuthContext } from './authContext';
+import { useNavigation } from '@react-navigation/native';
 
 const Anuncios = ({ currentUser }) => {
   const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
@@ -19,6 +20,7 @@ const Anuncios = ({ currentUser }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [anuncios, setAnuncios] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (currentUser) {
@@ -66,16 +68,20 @@ const Anuncios = ({ currentUser }) => {
     }
   };
 
+  const handleOpenAdDetails = (item) => {
+    navigation.navigate('AdDetails', item);
+  };
+
   return (
     <View style={styles.container}>
-      {hasIdTrabajo && (
+      {hasIdTrabajo ? (
         <TouchableOpacity
           style={styles.createAdButton}
           onPress={handleCreateAd}
         >
           <Text style={styles.createAdButtonText}>+</Text>
         </TouchableOpacity>
-      )}
+      ) : null}
 
       <Modal visible={showCreateAdForm} animationType="slide">
         <View style={styles.modalContainer}>
@@ -105,10 +111,7 @@ const Anuncios = ({ currentUser }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.anuncioItem}
-            onPress={() => {
-              // Manejar la apertura de anuncio o navegación a detalles
-              console.log("Abre el anuncio:", item.title);
-            }}
+            onPress={() => handleOpenAdDetails(item)}
           >
             <Text style={styles.anuncioTitle}>{item.title}</Text>
             <Text style={styles.anuncioDescription}>{item.description}</Text>
