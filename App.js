@@ -66,7 +66,7 @@ export default function App() {
           />
           <Stack.Screen
             name="Anuncios"
-            component={Anuncios} // Agrega la pantalla Anuncios
+            component={Anuncios}
             options={{
               title: 'Anuncios',
             }}
