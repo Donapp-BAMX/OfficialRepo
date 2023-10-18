@@ -4,6 +4,7 @@ import { updateTask, getUserInformation, saveTasks, getTasks } from './firebase'
 import { AuthContext } from './authContext';
 import { useNavigation } from '@react-navigation/native'; // Importa useNavigation desde React Navigation
 import TaskDetail from './taskDetail';
+import { Card, Input, Button as RNEButton } from 'react-native-elements'; // Importa el componente Card, Input y Button de react-native-elements
 
 const VolunteerTasks = ({ currentUser }) => {
   const navigation = useNavigation();
@@ -73,9 +74,9 @@ useEffect(() => {
 return (
     <View style={styles.container}>
         {hasIdTrabajo && (
-            <View style={styles.createTaskButton}>
+            <View style={styles.createAdButton}>
                 <TouchableOpacity onPress={handleCreateTask}>
-                    <Text style={styles.createTaskButtonText}>+</Text>
+                    <Text style={styles.createAdButtonText}>+</Text>
                 </TouchableOpacity>
             </View>
         )}
@@ -103,8 +104,16 @@ return (
                 onChangeText={(text) => setVolunteers(text)}
                 style={styles.input}
             />
-            <Button title="Guardar Tarea" onPress={handleSaveTask} />
-            <Button title="Cancelar" onPress={handleCloseCreateTaskForm} />
+            <RNEButton title="Guardar Tarea"             
+            buttonStyle={styles.saveButton}
+            titleStyle={styles.saveButtonText}
+            onPress={handleSaveTask} 
+            />
+            <RNEButton title="Cancelar" 
+            buttonStyle={styles.cancelButton}
+            titleStyle={styles.cancelButtonText}
+            onPress={handleCloseCreateTaskForm} 
+            />
             </View>
         </Modal>
 
@@ -112,18 +121,20 @@ return (
             data={tasks}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
+              <Card containerStyle={styles.anuncioItem}>
                 <TouchableOpacity
-                style={styles.TaskItem}
-                onPress={() => {
-                    navigation.navigate('TaskDetail', { anuncio: item });
-                }}
-                >
-                <Text style={styles.taskTitle}>{item.title}</Text>
-                <Text style={styles.taskDescription}>
-                    {"Requeridos: " + item.volunteers + '\n' + "Al momento: " + item.currentVol + '\n'}
-                    {item.description.length > 50 ? item.description.slice(0, 50) + '...' : item.description}
-                </Text>
+                  style={styles.taskItem}
+                  onPress={() => {
+                      navigation.navigate('TaskDetail', { anuncio: item });
+                  }}
+                  >
+                  <Text style={styles.anuncioTitle}>{item.title}</Text>
+                  <Text style={styles.anuncioDescription}>
+                      {"Requeridos: " + item.volunteers + '\n' + "Al momento: " + item.currentVol}
+                      {item.description.length > 50 ? item.description.slice(0, 50) + '...' : item.description}
+                  </Text>
                 </TouchableOpacity>
+              </Card>
             )}
         />
 
@@ -137,9 +148,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  createTaskButton: {  
+  background: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'linear-gradient(to bottom, red, yellow)', // Degradado de rojo a amarillo
+  },
+  createAdButton: {
     position: 'absolute',
-    top: 10,
+    bottom: 35,
     right: 10,
     backgroundColor: 'blue',
     borderRadius: 25,
@@ -147,9 +163,8 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 1,
-  },
-  createTaskButtonText: {
+  }, 
+  createAdButtonText: {
     color: 'white',
     fontSize: 30,
   },
@@ -158,27 +173,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  input: {
+  inputContainer: {
     width: '80%',
     marginBottom: 10,
-    padding: 10,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,
   },
-  TaskItem: {
+  inputField: {
+    width: '100%', // Centra el campo de entrada
+  },
+  anuncioItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    borderRadius: 10,
   },
-  taskTitle: {
+  anuncioTitle: {
     fontSize: 18,
     fontWeight: 'bold',
   },
-  taskDescription: {
-  fontSize: 16,
+  anuncioDescription: {
+    fontSize: 16,
   },
 });
-  
   
 export default VolunteerTasks;
