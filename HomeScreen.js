@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
-import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase'; // Importa getAnuncios
+import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase';
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import DonationView from './DonationScreen'
+import DonationView from './DonationScreen';
 import Anuncios from './anunciosSection';
 import VoluntarioSection from './voluntarioSection';
 import PerfilSection from './PerfilSection';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,11 +49,47 @@ const DonationScreen = () => {
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Principal" component={HomeScreen} />
-      <Tab.Screen name="Donaciones" component={DonationScreen} /> 
-      <Tab.Screen name="Perfil" component={PerfilScreen} />
-      <Tab.Screen name="Voluntario" component={VoluntarioScreen} />
+    <Tab.Navigator 
+        tabBarOptions={{
+            activeTintColor: 'black',  // Color del texto cuando está activo
+        }}
+    >
+        <Tab.Screen 
+            name="Anuncios" 
+            component={HomeScreen} 
+            options={{
+                tabBarIcon: ({ focused, size }) => (
+                    <Icon name="home" color={focused ? 'black' : 'gray'} size={size * 1.4} />
+                ),
+            }}
+        />
+        <Tab.Screen 
+            name="Donaciones" 
+            component={DonationScreen} 
+            options={{
+                tabBarIcon: ({ focused, size }) => (
+                    <Icon name="gift" color={focused ? 'black' : 'gray'} size={size * 1.4} />
+                ),
+            }}
+        />
+        <Tab.Screen 
+            name="Perfil" 
+            component={PerfilScreen} 
+            options={{
+                tabBarIcon: ({ focused, size }) => (
+                    <Icon name="user" color={focused ? 'black' : 'gray'} size={size * 1.2} />
+                ),
+            }}
+        />
+        <Tab.Screen 
+            name="Voluntario" 
+            component={VoluntarioScreen} 
+            options={{
+                tabBarIcon: ({ focused, size }) => (
+                    <Icon name="heart" color={focused ? 'black' : 'gray'} size={size * 1.2} />
+                ),
+            }}
+        />
     </Tab.Navigator>
   );
 };

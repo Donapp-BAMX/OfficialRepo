@@ -75,9 +75,7 @@ const Anuncios = ({ currentUser }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.background}>
-        {/* Degradado sutil de color de rojo a amarillo en el fondo */}
-      </View>
+
       <FlatList
         data={anuncios}
         keyExtractor={(item) => item.id}
@@ -201,6 +199,12 @@ const styles = StyleSheet.create({
   },
   anuncioDescription: {
     fontSize: 16,
+  },
+  mainHeading: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
   },
 });
 
