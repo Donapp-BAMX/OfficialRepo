@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { logoutUser, getUserInformation, updateVolunteerStatus } from './firebase';
 import { AuthContext } from './authContext';
+import VolunteerTasks from './volunteerTasks';
 
 const LoadingScreen = () => (
   <View style={styles.container}>
@@ -65,83 +66,112 @@ const VoluntarioSection = ({ navigation }) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       {!isVolunteer && (
         <View>
-          <Text style={styles.mainHeading}>¡Únetenos!</Text>
-          <Text style={styles.description}>
-            Únete a nuestro valioso equipo de voluntarios en el Banco de Medicina y marca la diferencia en la vida de aquellos que lo necesitan.
-            {'\n\n'}
-            En nuestro compromiso de proporcionar acceso a medicamentos esenciales para quienes no pueden pagarlos, necesitamos personas como tú, con un corazón generoso y un deseo de contribuir al bienestar de la comunidad.
-            {'\n\n'}
-            Como voluntario, tendrás la oportunidad de:
-            {'\n'}
-            - Participar en la distribución de medicamentos a individuos vulnerables.
-            {'\n'}
-            - Colaborar en eventos de recaudación de medicamentos y recursos.
-            {'\n'}
-            - Compartir tu tiempo y habilidades para ayudar a quienes necesitan apoyo médico.
-            {'\n\n'}
-            Cada pequeña acción puede marcar una gran diferencia en la vida de quienes enfrentan desafíos de salud. Tu dedicación y solidaridad son invaluables.
-            {'\n\n'}
-            ¡Únete a nosotros hoy y sé parte del cambio positivo que nuestro mundo necesita! Juntos, podemos brindar esperanza y salud a quienes más lo necesitan. ¡Te recibimos con los brazos abiertos!
+          <Text>
+            ¡Únetenos!
+          </Text>
+          <Text>
+            {/* ... (tu contenido actual) ... */}
           </Text>
         </View>
       )}
-      {!isVolunteer ? (
-        <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
-          <Text style={styles.buttonText}>Quiero ser voluntario</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
-          <Text style={styles.buttonText}>Dejar de ser voluntario</Text>
-        </TouchableOpacity>
-      )}
       {isVolunteer && (
         <View>
-          <Text>¡Eres un voluntario!</Text>
+          <Text style={styles.anuncioTitle}>¡Eres un voluntario!{''}</Text>
+          <VolunteerTasks currentUser={currentUser} />
         </View>
       )}
-    </ScrollView>
+      <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
+        <Text style={styles.buttonText}>
+          {isVolunteer ? 'Dejar de ser voluntario' : 'Quiero ser voluntario'}
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: 'white',
   },
-  mainHeading: {
-    fontSize: 32,
+  background: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'linear-gradient(to bottom, red, yellow)', // Degradado de rojo a amarillo
+  },
+  createAdButton: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    backgroundColor: 'blue',
+    borderRadius: 25,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  createAdButtonText: {
+    color: 'white',
+    fontSize: 30,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    width: '80%',
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+  },
+  inputField: {
+    width: '100%', // Centra el campo de entrada
+  },
+  saveButton: {
+    backgroundColor: '#FFD700', // Baja el tono de amarillo
+    borderRadius: 25, // Añade redondez a los botones
+    marginTop: 10, // Crea profundidad
+  },
+  saveButtonText: {
+    color: 'black',
+  },
+  cancelButton: {
+    backgroundColor: '#FFD700', // Baja el tono de amarillo
+    borderRadius: 25, // Añade redondez a los botones
+    marginTop: 10, // Crea profundidad
+  },
+  cancelButtonText: {
+    color: 'black',
+  },
+  anuncioItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    borderRadius: 10,
+  },
+  anuncioTitle: {
+    fontSize: 22,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
+    textAlign: 'center', // Agrega esta línea
   },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 30,
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
   },
   customButton: {
     backgroundColor: '#FFD700',
     borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    alignItems: 'center',
+    width: 200,
+    height: 50,
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-    elevation: 10,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+    alignItems: 'center',
+    marginTop: -100,
   },
 });
 

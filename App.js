@@ -10,7 +10,10 @@ import ForgotPassword from './forgotPassword';
 import FoodRegister from './FoodRegister';
 import { AuthProvider } from './authContext';
 import VoluntarioSection from './voluntarioSection';
-
+import Anuncios from './anunciosSection'; // Importa el componente Anuncios
+import AdDetails from './AdDetails'; // Importa el componente AdDetails
+import volunteerTasks from './volunteerTasks';
+import TaskDetail from './taskDetail';
 
 const Stack = createStackNavigator();
 
@@ -49,7 +52,7 @@ export default function App() {
           />
           <Stack.Screen
             name="FoodRegister"
-            component={FoodRegister} // Agrega la pantalla FoodRegister
+            component={FoodRegister}
             options={{
               title: '',
             }}
@@ -59,6 +62,34 @@ export default function App() {
             component={VoluntarioSection}
             options={{
               title: '',
+            }}
+          />
+          <Stack.Screen
+            name="Anuncios"
+            component={Anuncios} // Agrega la pantalla Anuncios
+            options={{
+              title: 'Anuncios',
+            }}
+          />
+          <Stack.Screen
+            name="VolunteerTasks"
+            component={volunteerTasks}
+            options={{
+              title: '',
+            }}
+          />
+          <Stack.Screen
+            name="TaskDetail"
+            component={TaskDetail}
+            options={{
+              title: '',
+            }}
+          />
+          <Stack.Screen
+            name="AdDetails"
+            component={AdDetails} // Agrega la pantalla AdDetails
+            options={{
+              title: 'Detalles del Anuncio',
             }}
           />
         </Stack.Navigator>
