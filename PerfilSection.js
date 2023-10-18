@@ -8,6 +8,7 @@ const PerfilSection = ({ navigation }) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (currentUser) {
@@ -33,6 +34,12 @@ const PerfilSection = ({ navigation }) => {
       });
   };
 
+  useEffect(() => {
+    if (!isLoading) {
+      setIsLoaded(true);
+    }
+  }, [isLoading]);
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -43,29 +50,33 @@ const PerfilSection = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('./assets/perfil.png')} style={styles.profileImage} />
-      <Text style={styles.mainHeading}>{userData.name} {userData.lastName}</Text>
+      {isLoaded && (
+        <>
+          <Image source={require('./assets/perfil.png')} style={styles.profileImage} />
+          <Text style={styles.mainHeading}>{userData.name} {userData.lastName}</Text>
 
-      <View style={styles.infoBox}>
-        <View style={styles.emailContainer}>
-          <Text style={styles.descriptionTwo}>Email</Text>
-          <Text style={styles.emailValue}>{userData.email}</Text>
-        </View>
+          <View style={styles.infoBox}>
+            <View style={styles.emailContainer}>
+              <Text style={styles.descriptionTwo}>Email</Text>
+              <Text style={styles.emailValue}>{userData.email}</Text>
+            </View>
 
-        <View style={styles.emailContainer}>
-          <Text style={styles.descriptionTwo}>Bio</Text>
-          <Text style={styles.emailValue}>{userData.biography}</Text>
-        </View>
+            <View style={styles.emailContainer}>
+              <Text style={styles.descriptionTwo}>Bio</Text>
+              <Text style={styles.emailValue}>{userData.biography}</Text>
+            </View>
 
-        <View style={styles.emailContainer}>
-          <Text style={styles.descriptionTwo}>Fecha de Registro</Text>
-          <Text style={styles.emailValue}>{userData.registeredAt.toDate().toISOString().substring(0, 10)}</Text>
-        </View>
-      </View>
+            <View style={styles.emailContainer}>
+              <Text style={styles.descriptionTwo}>Fecha de Registro</Text>
+              <Text style={styles.emailValue}>{userData.registeredAt.toDate().toISOString().substring(0, 10)}</Text>
+            </View>
+          </View>
 
-      <TouchableOpacity style={styles.customButton} onPress={handleLogout}>
-        <Text style={styles.buttonText}>Logout</Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.customButton} onPress={handleLogout}>
+            <Text style={styles.buttonText}>Logout</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
