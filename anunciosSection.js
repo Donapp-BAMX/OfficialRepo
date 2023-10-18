@@ -1,19 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  FlatList,
-} from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase';
 import { AuthContext } from './authContext';
 import { useNavigation } from '@react-navigation/native';
-import { Card, Input, Button as RNEButton } from 'react-native-elements'; // Importa el componente Card, Input y Button de react-native-elements
+import { Card, Input, Button as RNEButton } from 'react-native-elements';
 
 const Anuncios = ({ currentUser }) => {
   const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
@@ -21,12 +11,12 @@ const Anuncios = ({ currentUser }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [anuncios, setAnuncios] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para la animación de carga
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
     if (currentUser) {
-      setIsLoading(true); // Mostrar animación de carga al iniciar la carga de anuncios
+      setIsLoading(true);
       getUserInformation(currentUser)
         .then((userData) => {
           setHasIdTrabajo(userData.idTrabajo !== undefined);
@@ -35,7 +25,7 @@ const Anuncios = ({ currentUser }) => {
           console.error('Error fetching user information:', error);
         })
         .finally(() => {
-          setIsLoading(false); // Ocultar animación de carga al finalizar la carga de anuncios
+          setIsLoading(false);
         });
 
       getAnuncios()
@@ -46,13 +36,15 @@ const Anuncios = ({ currentUser }) => {
           console.error('Error fetching anuncios:', error);
         })
         .finally(() => {
-          setIsLoading(false); // Ocultar animación de carga al finalizar la carga de anuncios
+          setIsLoading(false);
         });
     }
   }, [currentUser]);
 
   const handleCreateAd = () => {
     setShowCreateAdForm(true);
+    setTitle('');
+    setDescription('');
   };
 
   const handleCloseCreateAdForm = () => {
@@ -61,22 +53,18 @@ const Anuncios = ({ currentUser }) => {
 
   const handleSaveAd = async () => {
     try {
-      setIsLoading(true); // Mostrar animación de carga al guardar el anuncio
+      setIsLoading(true);
       await saveAnuncio(title, description);
       setShowCreateAdForm(false);
 
-      // Obtén la lista actual de anuncios
       const currentAnuncios = [...anuncios];
-
-      // Agrega el nuevo anuncio al principio de la lista
       currentAnuncios.unshift({ title, description, createdAt: new Date().getTime() });
 
-      // Actualiza el estado con la nueva lista de anuncios
       setAnuncios(currentAnuncios);
     } catch (error) {
       console.error('Error al guardar el anuncio:', error);
     } finally {
-      setIsLoading(false); // Ocultar animación de carga al finalizar la creación del anuncio
+      setIsLoading(false);
     }
   };
 
@@ -108,7 +96,7 @@ const Anuncios = ({ currentUser }) => {
       />
       {hasIdTrabajo ? (
         <TouchableOpacity
-          style={styles.createAdButton}
+          style={[styles.createAdButton, { backgroundColor: 'green' }]}
           onPress={handleCreateAd}
         >
           <Text style={styles.createAdButtonText}>+</Text>
@@ -116,20 +104,26 @@ const Anuncios = ({ currentUser }) => {
       ) : null}
       <Modal visible={showCreateAdForm} animationType="slide">
         <View style={styles.modalContainer}>
-          <Input
-            placeholder="Título del anuncio"
-            value={title}
-            onChangeText={(text) => setTitle(text)}
-            inputContainerStyle={styles.inputContainer}
-            containerStyle={styles.inputField} // Centra el campo de entrada
-          />
-          <Input
-            placeholder="Descripción del anuncio"
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-            inputContainerStyle={styles.inputContainer}
-            containerStyle={styles.inputField} // Centra el campo de entrada
-          />
+          <View style={styles.inputContainer1}>
+            <Input
+              placeholder="Título del anuncio"
+              value={title}
+              onChangeText={(text) => setTitle(text)}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
+              containerStyle={{ width: '100%' }}
+              inputStyle={{ textAlignVertical: 'center', color: 'black', fontSize: 16, marginTop: 20, placeholderTextColor: '#888' }}
+            />
+          </View>
+          <View style={styles.inputContainer2}>
+            <Input
+              placeholder="Descripción del anuncio"
+              value={description}
+              onChangeText={(text) => setDescription(text)}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
+              containerStyle={{ width: '100%' }}
+              inputStyle={{ textAlignVertical: 'center', color: 'black', fontSize: 16, marginTop: 20, placeholderTextColor: '#888' }}
+            />
+          </View>
           <RNEButton
             title="Guardar Anuncio"
             buttonStyle={styles.saveButton}
@@ -138,8 +132,8 @@ const Anuncios = ({ currentUser }) => {
           />
           <RNEButton
             title="Cancelar"
-            buttonStyle={styles.cancelButton}
-            titleStyle={styles.cancelButtonText}
+            buttonStyle={[styles.cancelButton, { backgroundColor: 'transparent', borderWidth: 0 }]}
+            titleStyle={[styles.cancelButtonText, { backgroundColor: 'transparent', borderWidth: 0 }]}
             onPress={handleCloseCreateAdForm}
           />
         </View>
@@ -157,13 +151,13 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: '100%',
-    backgroundColor: 'linear-gradient(to bottom, red, yellow)', // Degradado de rojo a amarillo
+    backgroundColor: 'linear-gradient(to bottom, red, yellow)',
   },
   createAdButton: {
     position: 'absolute',
-    bottom: 10,
-    right: 10,
-    backgroundColor: 'blue',
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'green',
     borderRadius: 25,
     width: 50,
     height: 50,
@@ -179,36 +173,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  inputContainer: {
+  inputContainer1: {
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '80%',
-    marginBottom: 10,
+    height: 40,
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
+    borderColor: 'gray',
+    marginTop: 60,
   },
-  inputField: {
-    width: '100%', // Centra el campo de entrada
+  inputContainer2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    height: 40,
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'gray',
   },
   saveButton: {
-    backgroundColor: '#FFD700', // Baja el tono de amarillo
-    borderRadius: 25, // Añade redondez a los botones
-    marginTop: 10, // Crea profundidad
+    backgroundColor: '#FFD700',
+    borderRadius: 25,
+    marginTop: 50,
   },
   saveButtonText: {
     color: 'black',
   },
   cancelButton: {
-    backgroundColor: '#FFD700', // Baja el tono de amarillo
-    borderRadius: 25, // Añade redondez a los botones
-    marginTop: 10, // Crea profundidad
+    marginTop: 10,
   },
   cancelButtonText: {
-    color: 'black',
+    color: 'red',
   },
   anuncioItem: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
     borderRadius: 10,
   },
   anuncioTitle: {
