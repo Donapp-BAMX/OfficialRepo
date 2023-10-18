@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, TextInput, FlatList, Image } from 'react-native';
 import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase';
 import { AuthContext } from './authContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,6 +8,8 @@ import Anuncios from './anunciosSection';
 import VoluntarioSection from './voluntarioSection';
 import PerfilSection from './PerfilSection';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+const empresaLogo = require('./img/empresa.png');
 
 const Tab = createBottomTabNavigator();
 
@@ -51,7 +53,17 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator 
         tabBarOptions={{
-            activeTintColor: 'black',  // Color del texto cuando está activo
+            activeTintColor: 'black',
+        }}
+        screenOptions={{
+          
+            headerStyle: {
+                backgroundColor: '#FFD700',
+            },
+            headerTintColor: 'black',
+            headerLeft: () => (
+                <Image source={empresaLogo} style={{ width: 70, height: 70, marginLeft: 15 }} resizeMode="contain" />
+            ),
         }}
     >
         <Tab.Screen 
