@@ -66,45 +66,31 @@ const VoluntarioSection = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {!isVolunteer && (
         <View>
-          <Text >
+          <Text>
             ¡Únetenos!
           </Text>
-          <Text >
-            Únete a nuestro valioso equipo de voluntarios en el Banco de Medicina y marca la diferencia en la vida de aquellos que lo necesitan.
-            {'\n\n'}
-            En nuestro compromiso de proporcionar acceso a medicamentos esenciales para quienes no pueden pagarlos, necesitamos personas como tú, con un corazón generoso y un deseo de contribuir al bienestar de la comunidad.
-            {'\n\n'}
-            Como voluntario, tendrás la oportunidad de:
-            {'\n'}
-            - Participar en la distribución de medicamentos a individuos vulnerables.
-            {'\n'}
-            - Colaborar en eventos de recaudación de medicamentos y recursos.
-            {'\n'}
-            - Compartir tu tiempo y habilidades para ayudar a quienes necesitan apoyo médico.
-            {'\n\n'}
-            Cada pequeña acción puede marcar una gran diferencia en la vida de quienes enfrentan desafíos de salud. Tu dedicación y solidaridad son invaluables.
-            {'\n\n'}
-            ¡Únete a nosotros hoy y sé parte del cambio positivo que nuestro mundo necesita! Juntos, podemos brindar esperanza y salud a quienes más lo necesitan. ¡Te recibimos con los brazos abiertos!
+          <Text>
+            {/* ... (tu contenido actual) ... */}
           </Text>
-          <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
-            <Text style={styles.buttonText}>Quiero ser voluntario</Text>
-          </TouchableOpacity>
         </View>
       )}
       {isVolunteer && (
         <View>
           <Text style={styles.anuncioTitle}>{'\n'}¡Eres un voluntario!{'\n'}</Text>
           <VolunteerTasks currentUser={currentUser} />
-          <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
-            <Text style={styles.buttonText}>Dejar de ser voluntario</Text>
-          </TouchableOpacity>
         </View>
       )}
-      
-    </View>
+      <View>
+        <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
+          <Text style={styles.buttonText}>
+            {isVolunteer ? 'Dejar de ser voluntario' : 'Quiero ser voluntario'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -176,8 +162,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center', // Agrega esta línea
   },
-  anuncioDescription: {
-    fontSize: 16,
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  customButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 25,
+    width: 200,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -100,
   },
 });
 
