@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
     elevation: 10,
     marginTop: 100,
-    marginBottom: 280,
+    marginBottom: 320,
   },
   buttonText: {
     fontSize: 16,
