@@ -66,7 +66,7 @@ const VoluntarioSection = ({ navigation }) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       {!isVolunteer && (
         <View>
           <Text>
@@ -79,18 +79,16 @@ const VoluntarioSection = ({ navigation }) => {
       )}
       {isVolunteer && (
         <View>
-          <Text style={styles.anuncioTitle}>{'\n'}¡Eres un voluntario!{'\n'}</Text>
+          <Text style={styles.anuncioTitle}>¡Eres un voluntario!{''}</Text>
           <VolunteerTasks currentUser={currentUser} />
         </View>
       )}
-      <View>
-        <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
-          <Text style={styles.buttonText}>
-            {isVolunteer ? 'Dejar de ser voluntario' : 'Quiero ser voluntario'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      <TouchableOpacity style={styles.customButton} onPress={handleRegisterVolunteer}>
+        <Text style={styles.buttonText}>
+          {isVolunteer ? 'Dejar de ser voluntario' : 'Quiero ser voluntario'}
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
