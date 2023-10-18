@@ -125,12 +125,12 @@ return (
                 <TouchableOpacity
                   style={styles.taskItem}
                   onPress={() => {
-                      navigation.navigate('TaskDetail', { anuncio: item });
+                      navigation.navigate('TaskDetail', { anuncio: item, });
                   }}
                   >
                   <Text style={styles.anuncioTitle}>{item.title}</Text>
                   <Text style={styles.anuncioDescription}>
-                      {"Requeridos: " + item.volunteers + '\n' + "Al momento: " + item.currentVol}
+                      {"Requeridos: " + item.volunteers + '\n' + "Al momento: " + item.currentVol + '\n'}
                       {item.description.length > 50 ? item.description.slice(0, 50) + '...' : item.description}
                   </Text>
                 </TouchableOpacity>

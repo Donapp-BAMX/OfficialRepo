@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, addDoc, collection, Timestamp, getDocs, updateDoc } from "firebase/firestore";
 import { sendPasswordResetEmail } from 'firebase/auth';
-
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -174,17 +173,6 @@ export const updateVolunteerStatus = async (currentUser, isVolunteer) => {
   }
 };
 
-// Funcion para confirmar que el usuario deja de ser voluntario
-const confirmLeaveVolunteer = () => {
-  updateVolunteerStatus(currentUser, false)
-    .then(() => {
-      setIsVolunteer(false);
-    })
-    .catch((error) => {
-      console.error('Error al dejar de ser voluntario:', error);
-    });
-};
-
 // Función para registrar o desregistrar al usuario como voluntario en Firebase
 export const toggleVolunteerStatus = async (currentUser, isVolunteer) => {
   if (!currentUser) {
@@ -226,7 +214,7 @@ export const updateTask = async (taskId, updatedData) => {
   }
 };
 
-//Función para actualizar si el usuario se le asigno una tarea
+// Función para actualizar el valor de voluntario en Firestore
 export const updateTaskAssigned = async (currentUser, isAssigned) => {
   if (!currentUser) {
     throw new Error('El usuario actual es nulo');
@@ -235,15 +223,17 @@ export const updateTaskAssigned = async (currentUser, isAssigned) => {
   const userDocRef = doc(db, 'users', currentUser);
 
   try {
+    // Obtén el documento del usuario
     const userDoc = await getDoc(userDocRef);
-
+    
+    // Actualiza el valor de voluntario en el documento
     if (userDoc.exists()) {
       await updateDoc(userDocRef, {
         taskAssigned: isAssigned,
       });
     }
   } catch (error) {
-    console.error('Error al actualizar el valor de asignación', error);
+    console.error('Error al actualizar el valor de voluntario:', error);
     throw error;
   }
 };
