@@ -14,19 +14,24 @@ const VoluntarioSection = ({ navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [isVolunteer, setIsVolunteer] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showTasks, setShowTasks] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await getUserInformation(currentUser);
+        setIsVolunteer(userData.voluntario);
+        setShowTasks(true);
+        setShowButton(true);
+      } catch (error) {
+        console.error('Error fetching user information:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     if (currentUser) {
-      getUserInformation(currentUser)
-        .then((userData) => {
-          setIsVolunteer(userData.voluntario);
-        })
-        .catch((error) => {
-          console.error('Error fetching user information:', error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      fetchData();
     }
   }, [currentUser]);
 
@@ -109,20 +114,22 @@ const VoluntarioSection = ({ navigation }) => {
           </Text>
         </View>
       )}
-      {isVolunteer && (
+      {isVolunteer && showTasks && (
         <View>
           <Text style={styles.anuncioTitle}>¡Eres un voluntario!{'\n'}</Text>
           <VolunteerTasks currentUser={currentUser} />
         </View>
       )}
-      <TouchableOpacity
-        style={styles.customButton}
-        onPress={handleRegisterOrUnregisterVolunteer}
-      >
-        <Text style={styles.buttonText}>
-          {isVolunteer ? 'Dejar de ser voluntario' : 'Quiero ser voluntario'}
-        </Text>
-      </TouchableOpacity>
+      {showButton && (
+        <TouchableOpacity
+          style={styles.customButton}
+          onPress={handleRegisterOrUnregisterVolunteer}
+        >
+          <Text style={styles.buttonText}>
+            {isVolunteer ? 'Dejar de ser voluntario' : 'Quiero ser voluntario'}
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -133,67 +140,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  background: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: 'linear-gradient(to bottom, red, yellow)', // Degradado de rojo a amarillo
-  },
-  createAdButton: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-    backgroundColor: 'blue',
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  createAdButtonText: {
-    color: 'white',
-    fontSize: 30,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inputContainer: {
-    width: '80%',
+  descriptionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
   },
-  inputField: {
-    width: '100%', // Centra el campo de entrada
+  descriptionText: {
+    fontSize: 16,
+    textAlign: 'left',
+    marginBottom: 5,
+    marginTop: 5,
   },
-  saveButton: {
-    backgroundColor: '#FFD700', // Baja el tono de amarillo
-    borderRadius: 25, // Añade redondez a los botones
-    marginTop: 10, // Crea profundidad
-  },
-  saveButtonText: {
-    color: 'black',
-  },
-  cancelButton: {
-    backgroundColor: '#FFD700', // Baja el tono de amarillo
-    borderRadius: 25, // Añade redondez a los botones
-    marginTop: 10, // Crea profundidad
-  },
-  cancelButtonText: {
-    color: 'black',
-  },
-  anuncioItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    borderRadius: 10,
+  bulletPoint: {
+    fontSize: 16,
+    marginLeft: 20,
+    marginBottom: 5,
   },
   anuncioTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    textAlign: 'center', // Agrega esta línea
+    textAlign: 'center',
+    marginBottom: 20,
   },
   buttonText: {
     color: 'white',
