@@ -21,16 +21,21 @@ const Anuncios = ({ currentUser }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [anuncios, setAnuncios] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para la animación de carga
   const navigation = useNavigation();
 
   useEffect(() => {
     if (currentUser) {
+      setIsLoading(true); // Mostrar animación de carga al iniciar la carga de anuncios
       getUserInformation(currentUser)
         .then((userData) => {
           setHasIdTrabajo(userData.idTrabajo !== undefined);
         })
         .catch((error) => {
           console.error('Error fetching user information:', error);
+        })
+        .finally(() => {
+          setIsLoading(false); // Ocultar animación de carga al finalizar la carga de anuncios
         });
 
       getAnuncios()
@@ -39,6 +44,9 @@ const Anuncios = ({ currentUser }) => {
         })
         .catch((error) => {
           console.error('Error fetching anuncios:', error);
+        })
+        .finally(() => {
+          setIsLoading(false); // Ocultar animación de carga al finalizar la carga de anuncios
         });
     }
   }, [currentUser]);
@@ -53,6 +61,7 @@ const Anuncios = ({ currentUser }) => {
 
   const handleSaveAd = async () => {
     try {
+      setIsLoading(true); // Mostrar animación de carga al guardar el anuncio
       await saveAnuncio(title, description);
       setShowCreateAdForm(false);
 
@@ -66,6 +75,8 @@ const Anuncios = ({ currentUser }) => {
       setAnuncios(currentAnuncios);
     } catch (error) {
       console.error('Error al guardar el anuncio:', error);
+    } finally {
+      setIsLoading(false); // Ocultar animación de carga al finalizar la creación del anuncio
     }
   };
 
@@ -75,6 +86,11 @@ const Anuncios = ({ currentUser }) => {
 
   return (
     <View style={styles.container}>
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFD700" />
+        </View>
+      )}
       <View style={styles.background}>
         {/* Degradado sutil de color de rojo a amarillo en el fondo */}
       </View>
@@ -201,6 +217,12 @@ const styles = StyleSheet.create({
   },
   anuncioDescription: {
     fontSize: 16,
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
 });
 
