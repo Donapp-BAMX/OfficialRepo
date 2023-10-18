@@ -13,6 +13,7 @@ import {
 import { logoutUser, getUserInformation, saveAnuncio, getAnuncios } from './firebase';
 import { AuthContext } from './authContext';
 import { useNavigation } from '@react-navigation/native';
+import { Card } from 'react-native-elements'; // Importa el componente Card de react-native-elements
 
 const Anuncios = ({ currentUser }) => {
   const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
@@ -74,6 +75,21 @@ const Anuncios = ({ currentUser }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.background}>
+        {/* Degradado sutil de color de rojo a amarillo en el fondo */}
+      </View>
+      <FlatList
+        data={anuncios}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Card containerStyle={styles.anuncioItem}>
+            <TouchableOpacity onPress={() => handleOpenAdDetails(item)}>
+              <Text style={styles.anuncioTitle}>{item.title}</Text>
+              <Text style={styles.anuncioDescription}>{item.description}</Text>
+            </TouchableOpacity>
+          </Card>
+        )}
+      />
       {hasIdTrabajo ? (
         <TouchableOpacity
           style={styles.createAdButton}
@@ -82,7 +98,6 @@ const Anuncios = ({ currentUser }) => {
           <Text style={styles.createAdButtonText}>+</Text>
         </TouchableOpacity>
       ) : null}
-
       <Modal visible={showCreateAdForm} animationType="slide">
         <View style={styles.modalContainer}>
           <Text>Título del anuncio:</Text>
@@ -103,21 +118,6 @@ const Anuncios = ({ currentUser }) => {
           <Button title="Cancelar" onPress={handleCloseCreateAdForm} />
         </View>
       </Modal>
-
-      {/* Lista de Anuncios */}
-      <FlatList
-        data={anuncios}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.anuncioItem}
-            onPress={() => handleOpenAdDetails(item)}
-          >
-            <Text style={styles.anuncioTitle}>{item.title}</Text>
-            <Text style={styles.anuncioDescription}>{item.description}</Text>
-          </TouchableOpacity>
-        )}
-      />
     </View>
   );
 };
@@ -128,9 +128,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  background: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'linear-gradient(to bottom, red, yellow)', // Degradado de rojo a amarillo
+  },
   createAdButton: {
     position: 'absolute',
-    top: 10,
+    bottom: 10, // Mover el botón hacia abajo
     right: 10,
     backgroundColor: 'blue',
     borderRadius: 25,
@@ -160,6 +165,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    borderRadius: 10,
   },
   anuncioTitle: {
     fontSize: 18,
