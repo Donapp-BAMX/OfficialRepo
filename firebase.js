@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, addDoc, collection, Timestamp, getDocs, updateDoc } from "firebase/firestore";
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { deleteDoc} from 'firebase/firestore';
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -236,6 +238,19 @@ export const updateTaskAssigned = async (currentUser, isAssigned) => {
     }
   } catch (error) {
     console.error('Error al actualizar el valor de voluntario:', error);
+    throw error;
+  }
+};
+
+// Función para eliminar un anuncio en Firestore
+export const deleteAnuncio = async (anuncioId) => {
+  const anuncioRef = doc(db, "anuncios", anuncioId);
+
+  try {
+    await deleteDoc(anuncioRef);
+    console.log("Anuncio eliminado exitosamente.");
+  } catch (error) {
+    console.error("Error al eliminar el anuncio:", error);
     throw error;
   }
 };
