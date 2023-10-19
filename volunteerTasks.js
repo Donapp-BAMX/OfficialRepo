@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 50,
     right: 20,
-    backgroundColor: 'green',
+    backgroundColor: '#FFD700',
     borderRadius: 25,
     width: 50,
     height: 50,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   createAdButtonText: {
-    color: 'white',
+    color: '#000',
     fontSize: 30,
   },
   modalContainer: {

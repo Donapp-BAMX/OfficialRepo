@@ -163,13 +163,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonText: {
-    color: 'white',
+    color: '#000',
+    fontWeight: 'bold',
     fontSize: 18,
   },
   customButton: {
     backgroundColor: '#FFD700',
     borderRadius: 25,
-    width: 200,
+    width: 230,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
