@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, Tex
 import { getUserInformation, saveTasks, getTasks } from './firebase';
 import { useNavigation } from '@react-navigation/native';
 import { Card, Input, Button as RNEButton } from 'react-native-elements';
+import { ScrollView, RefreshControl } from 'react-native';
 
 const VolunteerTasks = ({ currentUser }) => {
   const navigation = useNavigation();
@@ -14,6 +15,7 @@ const VolunteerTasks = ({ currentUser }) => {
   const [tasks, setTasks] = useState([]);
   const [currentVol, setCurrentVol] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,6 +56,19 @@ const VolunteerTasks = ({ currentUser }) => {
     setVolunteers('');
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true); // Start the refresh indicator
+
+    try {
+      const tasksData = await getTasks(); // Refetch your tasks data
+      setTasks(tasksData);
+    } catch (error) {
+      console.error('Error refreshing tasks:', error);
+    } finally {
+      setRefreshing(false); // Finish the refresh indicator
+    }
+  };
+
   const handleCloseCreateTaskForm = () => {
     setShowCreateTaskForm(false);
   };
@@ -81,7 +96,12 @@ const VolunteerTasks = ({ currentUser }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlatList refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+        />
+      }
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -173,8 +193,8 @@ const styles = StyleSheet.create({
   },
   createAdButton: {
     position: 'absolute',
-    bottom: 101,
-    right: -70,
+    bottom: 50,
+    right: 20,
     backgroundColor: '#FFD700',
     borderRadius: 25,
     width: 50,

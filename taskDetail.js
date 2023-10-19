@@ -97,7 +97,7 @@ const TaskDetail = ({ route }) => {
                 <Text style={styles.description}>Voluntarios Requeridos: {anuncio.volunteers}           Voluntarios Enrrolados: {currentVolunteers} {'\n'}</Text>
                 {isAssigned ? (
                 <Button
-                    title="Desasignarse"
+                    title="Cancelar Registro"
                     buttonStyle={styles.button}
                     titleStyle={styles.buttonTitle}
                     onPress={handleUnregister}
@@ -145,11 +145,12 @@ const styles = StyleSheet.create({
           textAlign: 'center',
         },
         button: {
-          backgroundColor: 'yellow',
+          backgroundColor: '#FFD700',
+          borderRadius: 15, // Esquinas redondeadas
           marginTop: 10, // Agregamos espacio entre el texto y el botón
         },
         buttonTitle: {
-          color: 'red',
+          color: 'black', // Cambiamos el color del texto a negro
         },
       });
 
