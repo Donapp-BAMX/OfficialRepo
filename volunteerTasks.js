@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Modal, TextInput, FlatList } from 'react-native';
 import { getUserInformation, saveTasks, getTasks } from './firebase';
 import { useNavigation } from '@react-navigation/native';
-import { Card, Button as RNEButton } from 'react-native-elements';
+import { Card, Input, Button as RNEButton } from 'react-native-elements';
 
 const VolunteerTasks = ({ currentUser }) => {
   const navigation = useNavigation();
@@ -12,7 +12,8 @@ const VolunteerTasks = ({ currentUser }) => {
   const [description, setDescription] = useState('');
   const [volunteers, setVolunteers] = useState('');
   const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [currentVol, setCurrentVol] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,21 +25,21 @@ const VolunteerTasks = ({ currentUser }) => {
       }
 
       try {
-        const anunciosData = await getTasks();
-        setTasks(anunciosData);
+        const tasksData = await getTasks();
+        setTasks(tasksData);
       } catch (error) {
         console.error('Error fetching tasks:', error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    if (currentUser && loading) {
+    if (currentUser && isLoading) {
       fetchData();
     }
-  }, [currentUser, loading]);
+  }, [currentUser, isLoading]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="#FFD700" />
@@ -48,6 +49,9 @@ const VolunteerTasks = ({ currentUser }) => {
 
   const handleCreateTask = () => {
     setShowCreateTaskForm(true);
+    setTitle('');
+    setDescription('');
+    setVolunteers('');
   };
 
   const handleCloseCreateTaskForm = () => {
@@ -55,75 +59,28 @@ const VolunteerTasks = ({ currentUser }) => {
   };
 
   const handleSaveTask = async () => {
-    if (title.trim() === '' || description.trim() === '' || volunteers.trim() === '') {
-      console.error('Título, descripción y número de voluntarios son obligatorios.');
-      return;
-    }
-
     try {
-      const taskId = await saveTasks(title, description, volunteers);
+      setIsLoading(true);
+      const taskId = await saveTasks(title, description, volunteers, currentVol);
       setShowCreateTaskForm(false);
-
-      const currentTasks = [{ id: taskId, title, description, volunteers }, ...tasks];
-
+  
+      const currentTasks = [...tasks];
+      currentTasks.unshift({ id: taskId, title, description, volunteers, currentVol: 0, createdAt: new Date().getTime() });
+  
       setTasks(currentTasks);
-
       setTitle('');
       setDescription('');
       setVolunteers('');
     } catch (error) {
       console.error('Error al guardar la tarea:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   return (
     <View style={styles.container}>
-      {hasIdTrabajo && (
-        <View style={styles.createAdButton}>
-          <TouchableOpacity onPress={handleCreateTask}>
-            <Text style={styles.createAdButtonText}>+</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      <Modal visible={showCreateTaskForm} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text>Título de la tarea:</Text>
-          <TextInput
-            placeholder="Título"
-            value={title}
-            onChangeText={setTitle}
-            style={styles.input}
-          />
-          <Text>Descripción de la tarea:</Text>
-          <TextInput
-            placeholder="Descripción"
-            value={description}
-            onChangeText={setDescription}
-            style={styles.input}
-          />
-          <Text>Voluntarios Requeridos:</Text>
-          <TextInput
-            placeholder="Voluntarios"
-            value={volunteers}
-            onChangeText={setVolunteers}
-            style={styles.input}
-          />
-          <RNEButton
-            title="Guardar Tarea"
-            buttonStyle={styles.saveButton}
-            titleStyle={styles.saveButtonText}
-            onPress={handleSaveTask}
-          />
-          <RNEButton
-            title="Cancelar"
-            buttonStyle={styles.cancelButton}
-            titleStyle={styles.cancelButtonText}
-            onPress={handleCloseCreateTaskForm}
-          />
-        </View>
-      </Modal>
-
       <FlatList
         data={tasks}
         keyExtractor={(item) => item.id}
@@ -145,6 +102,60 @@ const VolunteerTasks = ({ currentUser }) => {
           </Card>
         )}
       />
+      {hasIdTrabajo && (
+        <TouchableOpacity
+          style={styles.createAdButton}
+          onPress={handleCreateTask}
+        >
+          <Text style={styles.createAdButtonText}>+</Text>
+        </TouchableOpacity>
+      )}
+      <Modal visible={showCreateTaskForm} animationType="slide">
+        <View style={styles.modalContainer}>
+        <View style={styles.inputContainer1}>
+            <Input
+              placeholder="Título del anuncio"
+              value={title}
+              onChangeText={setTitle}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
+              containerStyle={{ width: '100%' }}
+              inputStyle={{ textAlignVertical: 'center', color: 'black', fontSize: 16, marginTop: 20, placeholderTextColor: '#888' }}
+            />
+          </View>
+          <View style={styles.inputContainer2}>
+            <Input
+              placeholder="Descripción del anuncio"
+              value={description}
+              onChangeText={setDescription}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
+              containerStyle={{ width: '100%' }}
+              inputStyle={{ textAlignVertical: 'center', color: 'black', fontSize: 16, marginTop: 20, placeholderTextColor: '#888' }}
+            />
+          </View>
+          <View style={styles.inputContainer2}>
+            <Input
+              placeholder="Voluntarios requeridos"
+              value={volunteers}
+              onChangeText={setVolunteers}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
+              containerStyle={{ width: '100%' }}
+              inputStyle={{ textAlignVertical: 'center', color: 'black', fontSize: 16, marginTop: 20, placeholderTextColor: '#888' }}
+            />
+          </View>
+          <RNEButton
+            title="Guardar Anuncio"
+            buttonStyle={styles.saveButton}
+            titleStyle={styles.saveButtonText}
+            onPress={handleSaveTask}
+          />
+          <RNEButton
+            title="Cancelar"
+            buttonStyle={[styles.cancelButton, { backgroundColor: 'transparent', borderWidth: 0 }]}
+            titleStyle={[styles.cancelButtonText, { backgroundColor: 'transparent', borderWidth: 0 }]}
+            onPress={handleCloseCreateTaskForm}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -155,11 +166,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  background: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: 'linear-gradient(to bottom, red, yellow)',
+  },
   createAdButton: {
     position: 'absolute',
-    bottom: 35,
-    right: 10,
-    backgroundColor: 'blue',
+    bottom: 50,
+    right: 20,
+    backgroundColor: 'green',
     borderRadius: 25,
     width: 50,
     height: 50,
@@ -175,30 +191,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  input: {
+  inputContainer1: {
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '80%',
-    marginBottom: 10,
+    height: 40,
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
+    borderColor: 'gray',
+    marginTop: 60,
+  },
+  inputContainer2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '80%',
+    height: 40,
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'gray',
   },
   saveButton: {
     backgroundColor: '#FFD700',
+    borderRadius: 25,
+    marginTop: 50,
   },
   saveButtonText: {
-    color: 'white',
+    color: 'black',
   },
   cancelButton: {
-    backgroundColor: 'gray',
     marginTop: 10,
   },
   cancelButtonText: {
-    color: 'white',
+    color: 'red',
   },
   anuncioItem: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
     borderRadius: 10,
   },
   anuncioTitle: {
@@ -207,6 +238,12 @@ const styles = StyleSheet.create({
   },
   anuncioDescription: {
     fontSize: 16,
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
 });
 

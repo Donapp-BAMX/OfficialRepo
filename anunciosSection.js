@@ -6,13 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Card, Input, Button as RNEButton } from 'react-native-elements';
 
 const Anuncios = ({ currentUser }) => {
+  const navigation = useNavigation();
+
   const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
   const [showCreateAdForm, setShowCreateAdForm] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [anuncios, setAnuncios] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (currentUser) {

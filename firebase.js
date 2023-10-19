@@ -30,7 +30,7 @@ export const registerUser = (email, password) => {
 };
   
   // Función para iniciar sesión
-  export const loginUser = (email, password) => {
+export const loginUser = (email, password) => {
     const auth = getAuth();
     return signInWithEmailAndPassword(auth, email, password);
 };
@@ -87,7 +87,7 @@ export const saveAnuncio = async (title, description) => {
 };
 
 // Funcion para guardar tareas en firestore
-export const saveTasks = async (title, description) => {
+export const saveTasks = async (title, description, volunteers, currentVol) => {
   const tasksCollection = collection(db, "tareas");
   const currentDate = Timestamp.now();
 
@@ -95,6 +95,8 @@ export const saveTasks = async (title, description) => {
     await addDoc(tasksCollection, {
       title,
       description,
+      volunteers,
+      currentVol,
       creationDate: currentDate,
     });
     console.log("Tarea asignada exitosamente.");
