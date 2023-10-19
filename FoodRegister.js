@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
 import { addFoodToFirebase } from './firebase';
@@ -19,7 +19,7 @@ const FoodRegister = () => {
   const [foodType, setFoodType] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Nuevo estado para la pantalla de carga
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFoodNameChange = (text) => {
     setFoodName(text);
@@ -44,7 +44,7 @@ const FoodRegister = () => {
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
-      setIsLoading(true); // Mostrar pantalla de carga al iniciar el registro
+      setIsLoading(true);
 
       if (!foodName || !calories || !expirationDate || !foodType || !description) {
         alert('Por favor, completa todos los campos.');
@@ -61,17 +61,14 @@ const FoodRegister = () => {
 
       const foodId = await addFoodToFirebase(foodData);
 
-      //alert(`Alimento registrado con éxito. ID: ${foodId}`);
-
       setFoodName('');
       setCalories('');
       setExpirationDate(new Date());
       setFoodType('');
       setDescription('');
-      
+
       setIsLoading(false);
       navigation.goBack();
-
     } catch (error) {
       alert('Error al registrar el alimento: ' + error.message);
     } finally {
@@ -93,102 +90,21 @@ const FoodRegister = () => {
     { label: 'Otros', value: 'otros' },
   ];
 
-  const inputContainer = {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '80%',
-    borderWidth: 1,
-    borderColor: 'gray',
-    marginBottom: 20,
-    padding: 10,
-    borderRadius: 20,
-  };
-
-  const buttonContainer = {
-    width: '80%',
-    marginTop: 50,
-    borderWidth: 1,
-    borderColor: 'green',
-    backgroundColor: 'green',
-    marginBottom: 20,
-    borderRadius: 20,
-    height: 40,
-    justifyContent: 'center',
-  };
-
-  const backButtonContainer = {
-    marginBottom: 20,
-    height: 40,
-    justifyContent: 'center',
-  };
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    heading: {
-      fontSize: 30,
-      marginBottom: 70,
-      fontWeight: 'bold',
-      marginTop: 60,
-    },
-    input: {
-      width: '80%',
-      borderWidth: 1,
-      borderColor: 'gray',
-      marginBottom: 20,
-      padding: 10,
-      borderRadius: 20,
-    },
-    datePickerContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 20,
-    },
-    foodTypeButtons: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '80%',
-      marginBottom: 20,
-    },
-    foodTypeButton: {
-      flex: 1,
-      borderWidth: 1,
-      borderColor: 'gray',
-      padding: 10,
-      alignItems: 'center',
-    },
-    expirationDateText: {
-      color: 'green',
-    },
-    selectedFoodTypeButton: {
-      backgroundColor: 'lightgreen',
-    },
-    loadingContainer: {
-      ...StyleSheet.absoluteFill,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    },
-  });
-
   return (
-    <View style={styles.container}>
+    <View style={styles.containerName}>
       <Text style={styles.heading}>Registrar Alimento</Text>
       <TextInput
         value={foodName}
         onChangeText={handleFoodNameChange}
         placeholder="Nombre del alimento"
-        style={inputContainer}
+        style={styles.inputContainer}
       />
       <TextInput
         value={calories}
         onChangeText={handleCaloriesChange}
         placeholder="Calorías"
         keyboardType="numeric"
-        style={inputContainer}
+        style={styles.inputContainer}
       />
       <View style={styles.datePickerContainer}>
         <Text style={styles.expirationDateText}>Fecha de caducidad: </Text>
@@ -217,14 +133,14 @@ const FoodRegister = () => {
         value={description}
         onChangeText={handleDescriptionChange}
         placeholder="Descripción del alimento"
-        style={[inputContainer, { height: 100 }]}
+        style={[styles.inputContainer, { height: 100 }]}
         multiline
       />
-      <TouchableOpacity style={buttonContainer} onPress={handleSubmit} disabled={isSubmitting}>
-        <Text style={{ textAlign: 'center', color: 'white' }}>Registrar</Text>
+      <TouchableOpacity style={styles.customButton} onPress={handleSubmit} disabled={isSubmitting}>
+        <Text style={styles.registerButton}>Registrar</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={backButtonContainer} onPress={handleBackPress}>
-        <Text style={{ textAlign: 'center', color: 'red' }}>Volver</Text>
+      <TouchableOpacity style={styles.backButtonContainer} onPress={handleBackPress}>
+        <Text style={styles.registerBackButton}>Volver</Text>
       </TouchableOpacity>
       {isLoading && (
         <View style={styles.loadingContainer}>
@@ -234,5 +150,108 @@ const FoodRegister = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerName: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'gray',
+    height: '6%',
+    height: 40,
+  },
+  heading: {
+    fontSize: 30,
+    marginBottom: 70,
+    fontWeight: 'bold',
+    marginTop: 60,
+  },
+  inputContainer: {
+    width: '90%',
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginBottom: 20,
+    padding: 10,
+    borderRadius: 20,
+    height: 40,
+    height: '6%',
+  },
+  datePickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  foodTypeButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+    marginBottom: 20,
+    marginLeft: -45,
+  },
+  foodTypeButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: 'gray',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderRadius: 10,
+    marginHorizontal: 10,
+    height: 80,
+    minWidth: 80,
+    marginHorizontal: 5,
+  },
+  expirationDateText: {
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  selectedFoodTypeButton: {
+    backgroundColor: '#FFD700',
+  },
+  customButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+    marginTop: 0,
+    marginBottom: 40,
+  },
+  backButtonContainer: {
+    marginTop: 10,
+    height: 40,
+    justifyContent: 'center',
+  },
+  loadingContainer: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  registerButton: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  registerBackButton: {
+    color: 'red',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+});
 
 export default FoodRegister;
