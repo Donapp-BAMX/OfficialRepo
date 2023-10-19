@@ -1,10 +1,34 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { Card, Button } from 'react-native-elements';
-import { deleteAnuncio } from './firebase'; // Importa la función para eliminar anuncios
+import { deleteAnuncio, getUserInformation, getTasks  } from './firebase'; // Importa la función para eliminar anuncios
+import { AuthContext } from './authContext';
+import React, { useState, useEffect, useContext } from 'react';
 
 const AdDetails = ({ route, navigation }) => {
   const { id, title, description } = route.params;
+  const { currentUser } = useContext(AuthContext);
+  const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await getUserInformation(currentUser);
+        setHasIdTrabajo(userData.idTrabajo !== undefined);
+      } catch (error) {
+        console.error('Error fetching user information:', error);
+      }
+
+      try {
+        const tasksData = await getTasks();
+        setTasks(tasksData);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    };
+
+    fetchData();
+  }, [currentUser]);
 
   // Función para manejar la eliminación de anuncios
   const handleDeleteAd = async () => {
@@ -43,11 +67,13 @@ const AdDetails = ({ route, navigation }) => {
         <TouchableOpacity style={styles.customButton} onPress={() => navigation.goBack()}>
           <Text style={styles.buttonText}>Regresar</Text>
         </TouchableOpacity>
-        <Button
-          title="Eliminar Anuncio"
-          buttonStyle={{ backgroundColor: 'red' }}
-          onPress={handleDeleteAd}
-        />
+        {hasIdTrabajo && (
+          <Button
+            title="Eliminar Anuncio"
+            buttonStyle={{ backgroundColor: 'red' }}
+            onPress={handleDeleteAd}
+          />
+        )}
       </Card>
     </View>
   );
