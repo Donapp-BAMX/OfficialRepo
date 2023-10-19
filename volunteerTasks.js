@@ -173,8 +173,8 @@ const styles = StyleSheet.create({
   },
   createAdButton: {
     position: 'absolute',
-    bottom: 50,
-    right: 20,
+    bottom: 101,
+    right: -70,
     backgroundColor: '#FFD700',
     borderRadius: 25,
     width: 50,
