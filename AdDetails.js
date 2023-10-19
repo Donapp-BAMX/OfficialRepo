@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { Card, Button } from 'react-native-elements';
-import { deleteAnuncio, getUserInformation, getTasks  } from './firebase'; // Importa la función para eliminar anuncios
+import { deleteAnuncio, getUserInformation, getTasks } from './firebase';
 import { AuthContext } from './authContext';
 import React, { useState, useEffect, useContext } from 'react';
 
@@ -9,6 +9,7 @@ const AdDetails = ({ route, navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,14 +26,14 @@ const AdDetails = ({ route, navigation }) => {
       } catch (error) {
         console.error('Error fetching tasks:', error);
       }
+
+      setLoading(false);
     };
 
     fetchData();
   }, [currentUser]);
 
-  // Función para manejar la eliminación de anuncios
   const handleDeleteAd = async () => {
-    // Mostrar un diálogo de confirmación antes de eliminar
     Alert.alert(
       'Eliminar Anuncio',
       '¿Estás seguro de que deseas eliminar este anuncio?',
@@ -45,9 +46,7 @@ const AdDetails = ({ route, navigation }) => {
           text: 'Eliminar',
           onPress: async () => {
             try {
-              // Llama a la función para eliminar el anuncio
               await deleteAnuncio(id);
-              // Redirige de nuevo a la lista de anuncios u otra pantalla
               navigation.goBack();
             } catch (error) {
               console.error('Error al eliminar el anuncio:', error);
@@ -58,22 +57,28 @@ const AdDetails = ({ route, navigation }) => {
     );
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FFD700" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Card containerStyle={styles.card}>
         <Card.Title style={styles.title}>{title}</Card.Title>
         <Card.Divider />
         <Text style={styles.description}>{description}</Text>
+        {hasIdTrabajo && (
+          <TouchableOpacity style={styles.customButtonDos} onPress={handleDeleteAd}>
+            <Text style={styles.buttonText}>Eliminar Anuncio</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={styles.customButton} onPress={() => navigation.goBack()}>
           <Text style={styles.buttonText}>Regresar</Text>
         </TouchableOpacity>
-        {hasIdTrabajo && (
-          <Button
-            title="Eliminar Anuncio"
-            buttonStyle={{ backgroundColor: 'red' }}
-            onPress={handleDeleteAd}
-          />
-        )}
       </Card>
     </View>
   );
@@ -104,6 +109,26 @@ const styles = StyleSheet.create({
   },
   customButton: {
     backgroundColor: '#FFD700',
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+    marginTop: 10,
+    marginBottom: 0,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  customButtonDos: {
+    backgroundColor: 'red',
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 20,
