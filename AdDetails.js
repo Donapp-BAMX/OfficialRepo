@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { Card, Button } from 'react-native-elements';
-import { deleteAnuncio, getUserInformation, getTasks } from './firebase';
+import { deleteAnuncio, getUserInformation, getTasks } from './firebase'; // Importa la función para eliminar anuncios
 import { AuthContext } from './authContext';
 import React, { useState, useEffect, useContext } from 'react';
 
@@ -9,7 +9,7 @@ const AdDetails = ({ route, navigation }) => {
   const { currentUser } = useContext(AuthContext);
   const [hasIdTrabajo, setHasIdTrabajo] = useState(false);
   const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Agregado en ambas ramas
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,12 +27,13 @@ const AdDetails = ({ route, navigation }) => {
         console.error('Error fetching tasks:', error);
       }
 
-      setLoading(false);
+      setLoading(false); // Agregado en ambas ramas
     };
 
     fetchData();
   }, [currentUser]);
 
+  // Función para manejar la eliminación de anuncios
   const handleDeleteAd = async () => {
     Alert.alert(
       'Eliminar Anuncio',
